@@ -1,0 +1,26 @@
+- name: "FLRTVC on VIOS playbook"
+  hosts: all
+  gather_facts: no
+  vars:
+    apar: sec
+    path: /usr/sys/inst.images
+    check: no
+    download_only: yes
+    increase: yes
+  tasks:
+    - name: Check for wget command
+      yum:
+        name: "wget"
+        state: latest
+    - name: "FLRTVC"
+      ibm.power_vios.flrtvc:
+        path: "{{ path }}"
+        verbose: yes
+        apar: "{{ apar }}"
+        force: no
+        clean: False
+        check_only: "{{ check }}"
+        download_only: "{{ download_only }}"
+        increase_fs: "{{ increase }}"
+      register: result
+    - debug: var=result

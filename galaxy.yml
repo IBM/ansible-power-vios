@@ -1,0 +1,49 @@
+# Copyright (c) IBM Corporation 2020
+
+# IBM collection namespace
+namespace: ibm
+
+# Ansible collection for Power VIOS OS
+name: power_vios
+
+# The version of the collection.
+version: 1.0.2
+
+# Collection README file (relative to root path)
+readme: README.md
+
+# A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
+# @nicks:irc/im.site#channel'
+authors:
+- Paul B. Finley (@pbfinley1911)
+
+# Collection Description
+description: Ansible Content for IBM Power Systems - VIOS provides a collection of content used to manage and deploy Power Systems VIOS.
+
+# Collection License
+license:
+- GPL-3.0-only
+
+# Collection Tags
+tags: [infrastructure, ibm, power, vios]
+
+# Collection Dependencies
+dependencies: {}
+
+# The URL of the originating SCM repository
+repository: https://github.com/IBM/ansible-power-vios
+
+# The URL to any online docs
+documentation: https://ibm.github.io/ansible-power-vios/index.html
+
+# The URL to the homepage of the collection/project
+homepage: https://github.com/IBM
+
+# The URL to the collection issue tracker
+issues: https://github.com/IBM/ansible-power-vios/issues
+
+# Files to ignore when building power_vios collection
+build_ignore:
+- builds
+- devops
+- '*.tar.gz'

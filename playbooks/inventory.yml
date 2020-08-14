@@ -1,0 +1,10 @@
+all: # keys must be unique, i.e. only one 'hosts' per group
+    hosts:
+    vars:
+    children:   # key order does not matter, indentation does
+        vios:
+            hosts:
+                quimby-vios1:
+                    ansible_host: quimby-vios1.aus.stglabs.ibm.com
+            vars:
+                res_group: vios_res_grp
