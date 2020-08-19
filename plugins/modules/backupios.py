@@ -146,18 +146,17 @@ def main():
 
     get_ioslevel(module)
 
-    cmd = [ioscli_cmd, 'backupios']
-
     params = module.params
 
+    cmd = [ioscli_cmd, 'backupios']
     cmd += ['-file', params['file']]
     if params['mksysb']:
         cmd += ['-mksysb']
         if params['nopack']:
             # Create exclude file from exclude list
             with open('/etc/exclude_packing.rootvg', 'w+') as f:
-                f.writelines(params['nopack'])
-            cmd += ['-nopack']
+                f.writelines(l + '\n' for l in params['nopack'])
+            cmd += ['-nopak']
     if not params['savevgstruct']:
         cmd += ['-nosvg']
     if not params['savemedialib']:
