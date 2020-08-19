@@ -128,7 +128,7 @@ import re
 from ansible.module_utils.basic import AnsibleModule
 
 
-ioscli_cmd = 'ioscli'
+ioscli_cmd = '/usr/ios/cli/ioscli'
 
 
 def get_ioslevel(module):
