@@ -147,7 +147,7 @@ def get_ioslevel(module):
 
     ioslevel = stdout.split('\n')[0]
 
-    if not re.match(r"^\d+.\d+.\d+.\d+$", ioslevel):
+    if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
         results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
         module.fail_json(**results)
 
