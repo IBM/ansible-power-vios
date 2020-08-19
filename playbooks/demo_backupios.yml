@@ -1,0 +1,14 @@
+---
+- name: "backupios demo"
+  hosts: vios
+  gather_facts: no
+
+  collections:
+  - ibm.power_vios
+  tasks:
+
+  - name: Create an mksysb of the system
+    backupios:
+      file: /home/padmin/backup.mksysb
+      mksysb: yes
+      savemedialib: no
