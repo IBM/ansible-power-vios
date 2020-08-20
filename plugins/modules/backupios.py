@@ -96,7 +96,7 @@ import re
 from ansible.module_utils.basic import AnsibleModule
 
 
-ioscli_cmd = 'ioscli'
+ioscli_cmd = '/usr/ios/cli/ioscli'
 
 
 def get_ioslevel(module):
@@ -115,7 +115,7 @@ def get_ioslevel(module):
 
     ioslevel = stdout.split('\n')[0]
 
-    if not re.match(r"^\d+.\d+.\d+.\d+$", ioslevel):
+    if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
         results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
         module.fail_json(**results)
 
@@ -146,18 +146,17 @@ def main():
 
     get_ioslevel(module)
 
-    cmd = [ioscli_cmd, 'backupios']
-
     params = module.params
 
+    cmd = [ioscli_cmd, 'backupios']
     cmd += ['-file', params['file']]
     if params['mksysb']:
         cmd += ['-mksysb']
         if params['nopack']:
             # Create exclude file from exclude list
             with open('/etc/exclude_packing.rootvg', 'w+') as f:
-                f.writelines(params['nopack'])
-            cmd += ['-nopack']
+                f.writelines(l + '\n' for l in params['nopack'])
+            cmd += ['-nopak']
     if not params['savevgstruct']:
         cmd += ['-nosvg']
     if not params['savemedialib']:

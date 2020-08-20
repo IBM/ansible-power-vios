@@ -128,7 +128,7 @@ import re
 from ansible.module_utils.basic import AnsibleModule
 
 
-ioscli_cmd = 'ioscli'
+ioscli_cmd = '/usr/ios/cli/ioscli'
 
 
 def get_ioslevel(module):
@@ -147,7 +147,7 @@ def get_ioslevel(module):
 
     ioslevel = stdout.split('\n')[0]
 
-    if not re.match(r"^\d+.\d+.\d+.\d+$", ioslevel):
+    if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
         results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
         module.fail_json(**results)
 

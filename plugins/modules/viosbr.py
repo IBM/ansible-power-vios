@@ -32,7 +32,7 @@ options:
     - C(restore) to restore a backup file.
     - C(recoverdb) to recover from a corrupted shared storage pool (SSP) database.
     - C(migrate) to migrate a backup file from an older release level to a current
-      release level. A new file is created with I(_MIGRATED) string appended to
+      release level. A new file is created with C(_MIGRATED) string appended to
       the given file name.
     - C(dr) to recover the cluster on another geographic location.
     - C(list) to view the listing of backup files.
@@ -42,9 +42,9 @@ options:
   file:
     description:
     - Specifies the file name of the file that has backup information.
-    - For backup, compressed file is created with I(.tar.gz) extension.
-    - For cluster backups, compressed file is created with I(<clustername>.tar.gz) extension.
-    - If file name is a relative path, file is created under I(/home/padmin/cfgbackups).
+    - For backup, compressed file is created with C(.tar.gz) extension.
+    - For cluster backups, compressed file is created with C(<clustername>.tar.gz) extension.
+    - If file name is a relative path, file is created under C(/home/padmin/cfgbackups).
     type: str
   dir:
     description:
@@ -200,7 +200,7 @@ import re
 from ansible.module_utils.basic import AnsibleModule
 
 
-ioscli_cmd = 'ioscli'
+ioscli_cmd = '/usr/ios/cli/ioscli'
 
 
 def get_ioslevel(module):
@@ -219,7 +219,7 @@ def get_ioslevel(module):
 
     ioslevel = stdout.split('\n')[0]
 
-    if not re.match(r"^\d+.\d+.\d+.\d+$", ioslevel):
+    if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
         results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
         module.fail_json(**results)
 
