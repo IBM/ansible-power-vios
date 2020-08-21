@@ -1,0 +1,44 @@
+os: linux
+sudo: required
+dist: bionic
+language: python
+python:
+  - "3.7"
+
+# command to install dependencies
+install:
+  - sudo add-apt-repository ppa:deadsnakes/ppa --yes
+  - sudo apt-get --yes --force-yes install python3-venv
+  - pip install ansible
+  - pip install flake8
+  - pip3 install ansible-doc-extractor
+  - pip install sphinx
+  - pip install sphinx_rtd_theme
+  - ansible --version
+  - flake8 --version
+
+env:
+  global:
+    secure: kqXVcPMZ5RrHvtRV3sv6e/cI3y1WPPdjoBN9W395WRc7dGKq89tg6aYL4zrwmlE+IcmJEf6Nt0r1nFOdtYDLpJvuavI9wGq3opnFxyj16owgAdghLb9tb8EsZc5kd4Ga0D0hxvbnHsyvaYSBlsZBUczMPrXFAPDg7fRp9sW2Bejs7AAJy16hhIwWQgsM9/biGbh+N8Co+EzTsN7OjYlzakkUliikgg1bevvdEWNuyoN/QqT/W6s2E5ZQgEYsXL/YOa37nutF+NNoGf1pGL/h9II8bdDcV1PEbNsNfk8I8/R5ryQu2OZVS/TDzuJweEABwwXAaCGypXd85ZPYLnUbXuuWafG1aaiEqGWsZw1+nXDcmSZszs801RZOgd70o6hztN1NpjZUIoFWP2RDxzMnUVr0h05vMlbnqvOwfqFhVJjTsMNH1uOlIaKTBjp5H66yGNu4qlJC+3Cc3ybt1xUB5MQ7WLNoVlqVBinKLE3mlesx+MZEuTGucm/ohsZhg16fkwPjJpDfP9tgu5Kx/9fKyXyy/e+bnG7WjgrOKPg1jJrBiI9oRDJ+3KUDkhT60geH+1g1SSlxXOfnt+RJtB42rnXQ4Y37rYjyrkFTGrSou6wTmITmGRWyaAavUKt/fCHIRFL9ICGIhZghBfH+7NL8mc+d+SNhfnpr/n6vSQadmfI=
+
+# command to run tests
+script:
+
+  # With flake ignore
+  #  E402: <module> level import not at top of file (as per Ansible module developement)
+  #  W503: line break before binary operator (PEP8 advices to put logical operator ahead)
+  - flake8 plugins/modules/* --max-line-length=160 --ignore=E402,W503
+
+  - bash devops/bin/sanity_test.sh
+  - bash devops/bin/gen_doc.sh
+
+# push the generated documentation using GitHub Pages
+deploy:
+    provider: pages
+    strategy: git
+    skip_cleanup: true
+    token: $GITHUB_API_KEY
+    local_dir: docs/build
+    keep_history: true
+    on:
+        branch: dev-collection
