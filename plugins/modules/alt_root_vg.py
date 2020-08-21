@@ -78,7 +78,7 @@ msg:
     description: The execution message.
     returned: always
     type: str
-    sample: 'alt_root_vg operation completed successfully'
+    sample: 'alt_root_vg copy operation completed successfully'
 stdout:
     description: The standard output
     returned: always
