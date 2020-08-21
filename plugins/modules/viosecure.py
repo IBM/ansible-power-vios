@@ -28,6 +28,8 @@ options:
   level:
     description:
     - Specifies the security level settings to choose.
+    - Specifying C(high) security level might cause stability or
+      serviceability issues especially in a cluster environment.
     - Mutually exclusive with I(file).
     type: str
     choices: [ low, medium, high, default]
@@ -103,12 +105,15 @@ options:
         - Specifies the IPv6 firewall state and rules.
         type: dict
         suboptions: *ipcommon
+notes:
+  - Applying a C(high) security profile might cause stability or
+    serviceability issues especially if the VIOS is part of a cluster environment.
 '''
 
 EXAMPLES = r'''
-- name: Apply all of the high system security settings to the system
+- name: Apply all of the low system security settings to the system
   viosecure:
-    level: high
+    level: low
 
 - name: Apply security rules from file myfile
   viosecure:
