@@ -441,8 +441,8 @@ def alt_disk_clean(module, hdisks):
             if pvs[pv]['vg'] == 'altinst_rootvg':
                 hdisks.append(pv)
         if not hdisks:
-            results['msg'] = 'There is no alternate install rootvg'
-            module.fail_json(**results)
+            # Do not fail if there is no altinst_rootvg to preserve idempotency
+            return
 
     # First remove the alternate VG
     module.log('Removing altinst_rootvg')
