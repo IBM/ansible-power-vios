@@ -250,6 +250,8 @@ def viosbr_backup(module, params):
 
     if not os.path.isabs(filename):
         filename = os.path.join('/home/padmin/cfgbackups', filename)
+    if params['clustername']:
+        filename += '.' + params['clustername']
     results['file'] = filename + '.tar.gz'
     results['changed'] = True
 
