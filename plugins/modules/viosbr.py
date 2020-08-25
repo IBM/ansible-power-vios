@@ -189,7 +189,7 @@ ioslevel:
     sample: '3.1.0.00'
 file:
     description: The name of the backup file that has been created
-    returned: if I(action=backup) or I(action=migrate)
+    returned: if I(action=backup)
     type: str
     sample: /home/padmin/cfgbackups/myserverbackup.002.tar.gz
 '''
@@ -332,7 +332,6 @@ def viosbr_migrate(module, params):
         results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(' '.join(cmd), ret)
         module.fail_json(**results)
 
-    results['file'] = params['file'] + '_MIGRATED'
     results['changed'] = True
 
 
