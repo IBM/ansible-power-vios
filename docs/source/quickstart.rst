@@ -15,12 +15,12 @@ ansible user
 ------------
 
 Modules included in this collection require administrator rights to run.
-It is recommended to create an ``ansible`` user on the VIOS with the proper
-level of privilege like this:
+It is recommended to create an ``ansible`` user with the proper level of
+privilege while logged in as root on the VIOS:
 
 .. code-block:: sh
 
-   $ mkuser -attr roles=PAdmin,CacheAdm,FSAdmin,pkgadm \
+   $ mkuser roles=PAdmin,CacheAdm,FSAdmin,pkgadm \
           default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
 
 
