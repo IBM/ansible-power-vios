@@ -21,7 +21,7 @@ level of privilege like this:
 .. code-block:: sh
 
    $ mkuser -attr roles=PAdmin,CacheAdm,FSAdmin,pkgadm \
-            -attr default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
+          default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
 
 
 To connect to the VIOS using this ``ansible`` user, specify
