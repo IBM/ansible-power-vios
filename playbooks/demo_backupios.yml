@@ -3,6 +3,8 @@
   hosts: vios
   gather_facts: no
 
+  user: ansible
+
   collections:
   - ibm.power_vios
   tasks:
