@@ -18,7 +18,7 @@ Modules included in this collection require administrator rights to run.
 It is recommended to create an ``ansible`` user with the proper level of
 privilege on the VIOS like this:
 
-.. code-block:: sh
+.. code-block:: shell-session
 
    $ oem_setup_env
    # mkuser roles=PAdmin,CacheAdm,FSAdmin,pkgadm \
