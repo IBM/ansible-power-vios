@@ -16,7 +16,7 @@ install:
 - flake8 --version
 env:
   global:
-  - secure: lVxjuZKlZXf/ZMJ90O0rQ+keorqm4CzNtRCR2XPValoTRHp/2bKbqWRRa7ZsHVhWwlF/WXirQS3ak5pm5iDXaL3g6KwRYLSCt6SMOzCS82XtuH5c1fEIWsm+cdTqbBf30lWbvkjtUVsNm+LFYJ2qpkV7L+Sjh84pGUVQBfX8fvLpWGP8DkaVdm+iEkw01IkY0hiyk2plg1TX5GgkvehcSkLOa3B3o1tVP1h/A+n/F96R6rR7PHedPMHjPJ2icm0ldUF8fNeGEOaJKblOqqf8YjFdn3cpYl0hw24A8UhXkuJY/Y1K4x/iVF6q003lmXRgK4JoZ/+WTUEjrmXW/JEhqzISXQtXb7cAU7PuEeM4GMon56x3s9dpfO6hg0fUoVub0uOKBz7TjoimI6NxiWhk2OfVsBYgoXdniTPYEuolqmMAxqmv4jSI1P15YDLhyYOdQ60C+UrrbKwx9XaJnJcVo5mWqvVjOexH3qndEXqUFRS/72XL4AUc66SU6/rp+hS6nqbfIMv1yTwwWDU4F4PJwUpcFfRp3HnF2WBl8DrGyKgLEbSOdRgKpKFA26sOGy/Fzv4LcqS2T0OG8u9Z/WPwuyxFZ9j757gHpfmtOFvEREf6kMqUN1fn4KM+y3WB3xjqF09pMqsgrt5AjBRIpUYiSicvLGebmeUJ4jJnYWkCAKc=
+    secure: lVxjuZKlZXf/ZMJ90O0rQ+keorqm4CzNtRCR2XPValoTRHp/2bKbqWRRa7ZsHVhWwlF/WXirQS3ak5pm5iDXaL3g6KwRYLSCt6SMOzCS82XtuH5c1fEIWsm+cdTqbBf30lWbvkjtUVsNm+LFYJ2qpkV7L+Sjh84pGUVQBfX8fvLpWGP8DkaVdm+iEkw01IkY0hiyk2plg1TX5GgkvehcSkLOa3B3o1tVP1h/A+n/F96R6rR7PHedPMHjPJ2icm0ldUF8fNeGEOaJKblOqqf8YjFdn3cpYl0hw24A8UhXkuJY/Y1K4x/iVF6q003lmXRgK4JoZ/+WTUEjrmXW/JEhqzISXQtXb7cAU7PuEeM4GMon56x3s9dpfO6hg0fUoVub0uOKBz7TjoimI6NxiWhk2OfVsBYgoXdniTPYEuolqmMAxqmv4jSI1P15YDLhyYOdQ60C+UrrbKwx9XaJnJcVo5mWqvVjOexH3qndEXqUFRS/72XL4AUc66SU6/rp+hS6nqbfIMv1yTwwWDU4F4PJwUpcFfRp3HnF2WBl8DrGyKgLEbSOdRgKpKFA26sOGy/Fzv4LcqS2T0OG8u9Z/WPwuyxFZ9j757gHpfmtOFvEREf6kMqUN1fn4KM+y3WB3xjqF09pMqsgrt5AjBRIpUYiSicvLGebmeUJ4jJnYWkCAKc=
 script:
 - flake8 plugins/modules/* --max-line-length=160 --ignore=E402,W503
 - bash devops/bin/sanity_test.sh
@@ -25,7 +25,7 @@ deploy:
   provider: pages
   strategy: git
   skip_cleanup: true
-  token: "$GITHUB_API_KEY"
+  token: $GITHUB_API_KEY
   local_dir: docs/build
   keep_history: true
   on:
