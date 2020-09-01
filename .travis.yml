@@ -3,42 +3,30 @@ sudo: required
 dist: bionic
 language: python
 python:
-  - "3.7"
-
-# command to install dependencies
+- '3.7'
 install:
-  - sudo add-apt-repository ppa:deadsnakes/ppa --yes
-  - sudo apt-get --yes --force-yes install python3-venv
-  - pip install ansible
-  - pip install flake8
-  - pip3 install ansible-doc-extractor
-  - pip install sphinx
-  - pip install sphinx_rtd_theme
-  - ansible --version
-  - flake8 --version
-
+- sudo add-apt-repository ppa:deadsnakes/ppa --yes
+- sudo apt-get --yes --force-yes install python3-venv
+- pip install ansible
+- pip install flake8
+- pip3 install ansible-doc-extractor
+- pip install sphinx
+- pip install sphinx_rtd_theme
+- ansible --version
+- flake8 --version
 env:
   global:
-    secure: fvNvlP3VTseFXRC1FeGwXirSwn2iou7VmdI/HYKLIbd45l7jUsexqC0XA3RH+Blvx8JNH7AlcFYmkqWaRTODH3sNv2y/Ca38kPP+VqmUJNnn5+48N7bFzKwBLYEPba00KQCzFSshuWcXzQ+Q/iUwGdQbpfO25WspV4eAAjUjzfKSpdsXpFuOH37YNpooUZ81KoAZHCK/M/RhKryYjRT/mH9E5G17DWXBjKeharB/64gJFNO0VoSzKzZpZiva+RJqaSVlh+0SwLGj+P0Re2BKXmTy8Fl2gR3pGiraanGrMKnfNV5GU6sW+p0bXP1oUFAnlAO2odphIZdt0eyrmV2lTVwlbmR9s1IWcKtWUvDbIzQbP0NzTcA2siLP8rKWlHvJ3ZCgrd9Z6SfPhgYZVKu3Ds6BF0cFDppPmAetiuygNe2eJciXcSmY6fKPk6/z+k4NE2hUdeurRK/YwQxm9IjSUCwsVzbjQmiseZpoAmmOrlGgW0u6YdPdAhKtaj6+AnV+A8Uwktu40idfUxgzvxl7IIH7rFG0EeWdxlXyX2TSMApSpPdAoBQJ+JYvuAKrQ17HnTbrVRtgkNQJWRn1TSYkpgZ0JaNZfjTt82boffFzM8huyBKkvwpI3Ox+ONgHNDpjLETXlQb/iLH+hmvfb+rfYXjdqAnKvB9A9qHT3A+0/i0=
-
-# command to run tests
+  - secure: l3wMgmUP4c/+0jPBsTXn2ZWYTTQ8uTPN2YBVWtlLzRw9mmS4nJyG/FE8AMcL/tEdHCuqlfm7ADBHzI9dgwZKo+q9VmPEBo7wfXR9HFOLZsnHlSjSn+XU3WtDfO52MFf0FE0FLNoqVX3A13TGZUlda4clRI/+Jp5TiO3FstmZHlLGaRyclNbffU8IcgP1LUfJ6FYrnJD0/ghZ5XUjKNj1rFLLcmkdcCOHNodS5VnEJnZ9EucrzYLJBafDqybHQ4aF8n5bT2uoB8yAKZjBu0B4KSEY6LMhh+gzf5vhsrqGZXaZ9iUyZLM7wQyw17Pm1V7uYxB0w9iwX0oKwzbX6FM5UHswW+UycxOxVhfrM6pwY7B0ETSGUWRVyD5wmXHVReoeKjYERH9sL+8RCdN8iEcavjQTDKaEn35CQNeV36lgxm3AThp+0NSVPqLHqV0dJNs5ekIM0evHy/qYGPjLpEXpQtTKyYZ41xRuZWG1lufsipkRVEQ/2NJXI7VoGCFMhHvITM5gngxOJuj/Cx6ov5owiF6RzoDEmZOTsNJsTdqijdUxo/3I0mZa9LcBgXfKQQSuFxAf703qQyguNiJ+52WzEePaoABpx99DHOsqyvH4/fG7KO/la0912XzZCXkJWGzUQeMQx6ekmhMlcCC4WXQQLr/bWz1m9lLWWQ1lzcCFgRY=
 script:
-
-  # With flake ignore
-  #  E402: <module> level import not at top of file (as per Ansible module developement)
-  #  W503: line break before binary operator (PEP8 advices to put logical operator ahead)
-  - flake8 plugins/modules/* --max-line-length=160 --ignore=E402,W503
-
-  - bash devops/bin/sanity_test.sh
-  - bash devops/bin/gen_doc.sh
-
-# push the generated documentation using GitHub Pages
+- flake8 plugins/modules/* --max-line-length=160 --ignore=E402,W503
+- bash devops/bin/sanity_test.sh
+- bash devops/bin/gen_doc.sh
 deploy:
-    provider: pages
-    strategy: git
-    skip_cleanup: true
-    token: $GITHUB_API_KEY
-    local_dir: docs/build
-    keep_history: true
-    on:
-        branch: dev-collection
+  provider: pages
+  strategy: git
+  skip_cleanup: true
+  token: "$GITHUB_API_KEY"
+  local_dir: docs/build
+  keep_history: true
+  on:
+    branch: dev-collection
