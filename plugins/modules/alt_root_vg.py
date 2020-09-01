@@ -15,7 +15,7 @@ DOCUMENTATION = r'''
 ---
 author:
 - AIX Development Team (@pbfinley1911)
-module: vios_alt_disk
+module: alt_root_vg
 short_description: Create/Cleanup an alternate rootvg disk on a VIOS
 description:
 - Copy the rootvg to an alternate disk or cleanup an existing one.
@@ -27,11 +27,11 @@ options:
   action:
     description:
     - Specifies the operation to perform on the VIOS.
-    - C(alt_disk_copy) to perform and alternate disk copy.
-    - C(alt_disk_clean) to cleanup an existing alternate disk copy.
+    - C(copy) to perform and alternate disk copy.
+    - C(clean) to cleanup an existing alternate disk copy.
     type: str
-    choices: [ alt_disk_copy, alt_disk_clean ]
-    required: true
+    choices: [ copy, clean ]
+    default: copy
   targets:
     description:
     - Specifies the target disks.
@@ -39,21 +39,20 @@ options:
     elements: str
   disk_size_policy:
     description:
-    - Specifies how to choose the alternate disk if not specified.
+    - When I(action=copy), specifies how to choose the alternate disk if I(targets) is not specified.
     - C(minimize) smallest disk that can be selected.
     - C(upper) first disk found bigger than the rootvg disk.
     - C(lower) disk size less than rootvg disk size but big enough to contain the used PPs.
-    - C(nearest)
+    - C(nearest) disk size closest to the rootvg disk.
     type: str
     choices: [ minimize, upper, lower, nearest ]
-    default: nearest
   force:
     description:
     - Forces removal of any existing alternate disk copy on target disks.
     type: bool
     default: no
 notes:
-  - C(alt_disk_copy) only backs up mounted file systems. Mount all file
+  - M(alt_root_vg) only backs up mounted file systems. Mount all file
     systems that you want to back up.
   - when no target is specified, copy is performed to only one alternate
     disk even if the rootvg contains multiple disks
@@ -61,18 +60,16 @@ notes:
 
 EXAMPLES = r'''
 - name: Perform an alternate disk copy of the rootvg to hdisk1
-  vios_alt_disk:
-    action: alt_disk_copy
+  alt_root_vg:
     targets: hdisk1
 
 - name: Perform an alternate disk copy of the rootvg to the smallest disk that can be selected
-  vios_alt_disk:
-    action: alt_disk_copy
+  alt_root_vg:
     disk_size_policy: minimize
 
 - name: Perform a cleanup of any existing alternate disk copy
-  vios_alt_disk:
-    action: alt_disk_clean
+  alt_root_vg:
+    action: clean
 '''
 
 RETURN = r'''
@@ -80,7 +77,7 @@ msg:
     description: The execution message.
     returned: always
     type: str
-    sample: 'VIOS alt disk operation completed successfully'
+    sample: 'alt_root_vg copy operation completed successfully'
 stdout:
     description: The standard output
     returned: always
@@ -347,7 +344,7 @@ def check_rootvg(module):
         results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(' '.join(cmd), ret)
         return None
 
-    # parse lsvg outpout to get the size in megabytes:
+    # parse lsvg output to get the size in megabytes:
     # TOTAL PPs:           639 (40896 megabytes)
     # USED PPs:            404 (25856 megabytes)
     # PP SIZE:             64 megabyte(s)
@@ -389,6 +386,12 @@ def alt_disk_copy(module, hdisks, disk_size_policy, force):
     - perform the alt disk copy operation
     """
     global results
+
+    # Either hdisks must be non-empty or disk_size_policy must be
+    # explicitly set. This ensures the user knows what he is doing.
+    if not hdisks and not disk_size_policy:
+        results['msg'] = 'Either targets or disk_size_policy must be specified'
+        module.fail_json(**results)
 
     rootvg_info = check_rootvg(module)
     if rootvg_info is None:
@@ -441,8 +444,8 @@ def alt_disk_clean(module, hdisks):
             if pvs[pv]['vg'] == 'altinst_rootvg':
                 hdisks.append(pv)
         if not hdisks:
-            results['msg'] = 'There is no alternate install rootvg'
-            module.fail_json(**results)
+            # Do not fail if there is no altinst_rootvg to preserve idempotency
+            return
 
     # First remove the alternate VG
     module.log('Removing altinst_rootvg')
@@ -476,14 +479,16 @@ def main():
 
     module = AnsibleModule(
         argument_spec=dict(
-            action=dict(required=True, type='str',
-                        choices=['alt_disk_copy', 'alt_disk_clean']),
+            action=dict(type='str',
+                        choices=['copy', 'clean'], default='copy'),
             targets=dict(type='list', elements='str'),
             disk_size_policy=dict(type='str',
-                                  choices=['minimize', 'upper', 'lower', 'nearest'],
-                                  default='nearest'),
+                                  choices=['minimize', 'upper', 'lower', 'nearest']),
             force=dict(type='bool', default=False),
-        )
+        ),
+        mutually_exclusive=[
+            ['targets', 'disk_size_policy']
+        ],
     )
 
     results = dict(
@@ -498,12 +503,12 @@ def main():
     disk_size_policy = module.params['disk_size_policy']
     force = module.params['force']
 
-    if action == 'alt_disk_copy':
+    if action == 'copy':
         alt_disk_copy(module, targets, disk_size_policy, force)
     else:
         alt_disk_clean(module, targets)
 
-    results['msg'] = 'VIOS alt disk operation completed successfully'
+    results['msg'] = 'alt_root_vg {0} operation completed successfully'.format(action)
     module.exit_json(**results)
 
 

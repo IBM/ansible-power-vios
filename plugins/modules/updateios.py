@@ -216,14 +216,11 @@ def main():
 
     # Note: updateios is an interactive command.
     # We use the same mechanism nim uses (c_updateios.sh) to implement preview mode.
-    response = 'n'
-    if not module.check_mode:
-        response = 'y\ny'
+    response = 'n' if module.check_mode else 'y\ny'
 
-    # Do we want to implement a manage_ssp flag like in nim_updateios
-    # that would call clstartstop to remove the VIOS from the cluster
-    # before applying the update?
-    # It is probably better to manage this within playbooks/roles.
+    # We do not implement the "manage_ssp" flag found in nim_updateios.
+    # It is better to call clstartstop from the playbook or from a role
+    # to remove the VIOS from the cluster before applying any update.
 
     shcmd = "eval echo '{0}' | {1}".format(response, ' '.join(cmd))
     ret, stdout, stderr = module.run_command(shcmd, use_unsafe_shell=True)

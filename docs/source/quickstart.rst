@@ -11,6 +11,24 @@ can access the collection and the ansible-doc covered in the following topics:
 .. _installation:
    installation.html
 
+ansible user
+------------
+
+Modules included in this collection require administrator rights to run.
+It is recommended to create an ``ansible`` user with the proper level of
+privilege on the VIOS like this:
+
+.. code-block:: shell-session
+
+   $ oem_setup_env
+   # mkuser roles=PAdmin,CacheAdm,FSAdmin,pkgadm \
+          default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
+
+
+To connect to the VIOS using this ``ansible`` user, specify
+``user: ansible`` in the playbook or ``ansible_user=ansible`` in the
+inventory.
+
 ibm.power_vios
 --------------
 

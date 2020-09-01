@@ -155,7 +155,7 @@ def main():
         if params['nopack']:
             # Create exclude file from exclude list
             with open('/etc/exclude_packing.rootvg', 'w+') as f:
-                f.writelines(l + '\n' for l in params['nopack'])
+                f.writelines(line + '\n' for line in params['nopack'])
             cmd += ['-nopak']
     if not params['savevgstruct']:
         cmd += ['-nosvg']
