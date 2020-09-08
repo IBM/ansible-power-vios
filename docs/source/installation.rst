@@ -33,13 +33,13 @@ the ``==`` range identifier is set to that pre-release version.
 A pre-release version is denoted by appending a hyphen and a series of
 dot separated identifiers immediately following the patch version. The
 **IBM Power Systems VIOS collection** releases collections with the pre-release
-naming convention such as **1.0.0-beta1** that would require a range identifier.
+naming convention such as **1.0.2-beta** that would require a range identifier.
 
 Here is an example of installing a pre-release collection:
 
 .. code-block:: sh
 
-   $ ansible-galaxy collection install ibm.power_vios:==1.0.0-beta1
+   $ ansible-galaxy collection install ibm.power_vios:==1.0.2-beta
 
 
 If you have installed a prior version, you must overwrite an existing

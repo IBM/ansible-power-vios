@@ -7,7 +7,7 @@ namespace: ibm
 name: power_vios
 
 # The version of the collection.
-version: 1.0.2
+version: 1.0.2-beta
 
 # Collection README file (relative to root path)
 readme: README.md
