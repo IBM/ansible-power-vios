@@ -101,6 +101,13 @@ EXAMPLES = r'''
     action: install
     filesets: ILMT-TAD4D-agent
     device: /dev/cd1
+
+- name: Install an ifix copied in VIOS home directory
+  updateios:
+    action: update
+    device: /home/padmin/IV92895s7a
+    install_new: yes
+    accept_licenses: yes
 '''
 
 RETURN = r'''
