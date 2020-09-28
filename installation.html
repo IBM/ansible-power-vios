@@ -220,7 +220,7 @@ the collection, such as the sample playbook. By default, collections are
 installed in <code class="docutils literal notranslate"><span class="pre">~/.ansible/collections</span></code>; see the sample output.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Process install dependency map
 Starting collection install process
-Installing <span class="s1">&#39;ibm.power_vios:1.0.2&#39;</span> to <span class="s1">&#39;/Users/user/.ansible/collections/ansible_collections/ibm/power_vios&#39;</span>
+Installing <span class="s1">&#39;ibm.power_vios:1.1.0&#39;</span> to <span class="s1">&#39;/Users/user/.ansible/collections/ansible_collections/ibm/power_vios&#39;</span>
 </pre></div>
 </div>
 <p>After installation, the collection content will resemble this hierarchy: :</p>
@@ -325,22 +325,22 @@ installed locally without having to use Hub or Galaxy.</p>
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>Collection archive names will change depending on the release version.</p></li>
-<li><p>They adhere to this convention <strong>&lt;namespace&gt;-&lt;collection&gt;-&lt;version&gt;.tar.gz</strong>, for example, <strong>ibm-power_vios-1.0.2.tar.gz</strong></p></li>
+<li><p>They adhere to this convention <strong>&lt;namespace&gt;-&lt;collection&gt;-&lt;version&gt;.tar.gz</strong>, for example, <strong>ibm-power_vios-1.1.0.tar.gz</strong></p></li>
 </ul>
 </div>
 </li>
 <li><p>Install the local collection archive:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ansible-galaxy collection install ibm-power_vios-1.0.2.tar.gz
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ansible-galaxy collection install ibm-power_vios-1.1.0.tar.gz
 </pre></div>
 </div>
 <p>In the output of collection installation, note the installation path to access the sample playbook:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Process install dependency map
 Starting collection install process
-Installing <span class="s1">&#39;ibm.power_vios:1.0.2&#39;</span> to <span class="s1">&#39;/Users/user/.ansible/collections/ansible_collections/ibm/power_vios&#39;</span>
+Installing <span class="s1">&#39;ibm.power_vios:1.1.0&#39;</span> to <span class="s1">&#39;/Users/user/.ansible/collections/ansible_collections/ibm/power_vios&#39;</span>
 </pre></div>
 </div>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">-p</span></code> option with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code> to specify the
-installation path, for example, <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">ibm-power_vios-1.0.2.tar.gz</span> <span class="pre">-p</span> <span class="pre">/home/ansible/collections</span></code>.</p>
+installation path, for example, <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">ibm-power_vios-1.1.0.tar.gz</span> <span class="pre">-p</span> <span class="pre">/home/ansible/collections</span></code>.</p>
 <p>For more information, see <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/collections_using.html#installing-collections-with-ansible-galaxy">installing collections with Ansible Galaxy</a>.</p>
 </li>
 </ol>

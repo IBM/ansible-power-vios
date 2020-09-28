@@ -65,7 +65,7 @@ installed in ``~/.ansible/collections``; see the sample output.
 
    Process install dependency map
    Starting collection install process
-   Installing 'ibm.power_vios:1.0.2' to '/Users/user/.ansible/collections/ansible_collections/ibm/power_vios'
+   Installing 'ibm.power_vios:1.1.0' to '/Users/user/.ansible/collections/ansible_collections/ibm/power_vios'
 
 After installation, the collection content will resemble this hierarchy: :
 
@@ -187,14 +187,14 @@ To install a build from the ansible-power-vios Git repository:
 
       .. note::
          * Collection archive names will change depending on the release version.
-         * They adhere to this convention **<namespace>-<collection>-<version>.tar.gz**, for example, **ibm-power_vios-1.0.2.tar.gz**
+         * They adhere to this convention **<namespace>-<collection>-<version>.tar.gz**, for example, **ibm-power_vios-1.1.0.tar.gz**
 
 
    2. Install the local collection archive:
 
       .. code-block:: sh
 
-         $ ansible-galaxy collection install ibm-power_vios-1.0.2.tar.gz
+         $ ansible-galaxy collection install ibm-power_vios-1.1.0.tar.gz
 
       In the output of collection installation, note the installation path to access the sample playbook:
 
@@ -202,10 +202,10 @@ To install a build from the ansible-power-vios Git repository:
 
          Process install dependency map
          Starting collection install process
-         Installing 'ibm.power_vios:1.0.2' to '/Users/user/.ansible/collections/ansible_collections/ibm/power_vios'
+         Installing 'ibm.power_vios:1.1.0' to '/Users/user/.ansible/collections/ansible_collections/ibm/power_vios'
 
       You can use the ``-p`` option with ``ansible-galaxy`` to specify the
-      installation path, for example, ``ansible-galaxy collection install ibm-power_vios-1.0.2.tar.gz -p /home/ansible/collections``.
+      installation path, for example, ``ansible-galaxy collection install ibm-power_vios-1.1.0.tar.gz -p /home/ansible/collections``.
 
       For more information, see `installing collections with Ansible Galaxy`_.
 
