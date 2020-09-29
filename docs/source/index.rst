@@ -1,5 +1,5 @@
 IBM Power Systems VIOS Collection for Ansible
-============================================
+=============================================
 
 The **IBM Power Systems VIOS collection** provides modules that can be used to manage configurations and
 deployments of Power VIOS systems. The collection content helps to include workloads on
