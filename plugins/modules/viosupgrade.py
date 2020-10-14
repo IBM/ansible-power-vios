@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = r'''
 ---
@@ -54,8 +51,13 @@ options:
     description:
     - Specifies that cluster-level backup and restore operations are performed.
       Mandatory for a VIOS that is part of an SSP cluster.
+    - If not set, cluster membership is determined automatically.
     type: bool
-    default: no
+  timeout:
+    description:
+    - Specifies the timeout (in minutes) to wait for the upgrade to complete.
+    type: int
+    default: 60
 notes:
   - The level of the target mksysb image must be at version 3.1.0.00, or later.
   - Installations through this module are of the type New and Complete installation.
@@ -70,18 +72,18 @@ EXAMPLES = r'''
 - name: Perform the VIOS upgrade operation on new rootvg disks hdisk1 and hdisk2
   viosupgrade:
     image_file: mymksysbA
-    mksysb_install_disks: hdisk1,hdisk2
+    mksysb_install_disks: [hdisk1,hdisk2]
 
 - name: Upgrade the VIOS that belongs to an SSP cluster
   viosupgrade:
     image_file: mymksysbA
-    mksysb_install_disks: hdisk1,hdisk2
+    mksysb_install_disks: [hdisk1,hdisk2]
     cluster: yes
 
 - name: Copy files from the current rootvg disk to a newly installed VIOS image
   viosupgrade:
     image_file: mymksysbA
-    mksysb_install_disks: hdisk1,hdisk2
+    mksysb_install_disks: [hdisk1,hdisk2]
     filename: file_list_name
 '''
 
@@ -98,82 +100,12 @@ stderr:
     description: The standard error
     returned: always
     type: str
-ioslevel:
-    description: The latest installed maintenance level of the system
+old_rootvg:
+    description: The list of disks that are part of the old_rootvg after the upgrade
     returned: always
-    type: str
-    sample: '3.1.0.00'
+    type: list
+ioslevel:
+    description: The installed maintenance level of the system before and after the upgrade
+    returned: always
+    type: dict
 '''
-
-import re
-
-from ansible.module_utils.basic import AnsibleModule
-
-
-ioscli_cmd = '/usr/ios/cli/ioscli'
-
-
-def get_ioslevel(module):
-    """
-    Return the latest installed maintenance level of the system.
-    """
-    global results
-
-    cmd = [ioscli_cmd, 'ioslevel']
-    ret, stdout, stderr = module.run_command(cmd, check_rc=True)
-
-    ioslevel = stdout.splitlines()[0]
-
-    if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
-        results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
-        module.fail_json(**results)
-
-    results['ioslevel'] = ioslevel
-
-    return ioslevel
-
-
-def main():
-    global results
-
-    module = AnsibleModule(
-        supports_check_mode=True,
-        argument_spec=dict(
-            image_file=dict(required=True, type='str'),
-            mksysb_install_disks=dict(required=True, type='list', elements='str'),
-            cluster=dict(type='bool', default=False),
-            filename=dict(type='str'),
-        )
-    )
-
-    results = dict(
-        changed=False,
-        msg='',
-        stdout='',
-        stderr='',
-    )
-
-    get_ioslevel(module)
-
-    params = module.params
-    cmd = [ioscli_cmd, 'viosupgrade', '-l']
-    cmd += ['-i', params['image_file']]
-    cmd += ['-a', ':'.join(params['mksysb_install_disks'])]
-    if params['cluster']:
-        cmd += ['-c']
-    if params['filename']:
-        cmd += ['-g', params['filename']]
-
-    ret, stdout, stderr = module.run_command(cmd)
-    results['stdout'] = stdout
-    results['stderr'] = stderr
-    if ret != 0:
-        results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(cmd, ret)
-        module.fail_json(**results)
-
-    results['msg'] = 'viosupgrade completed successfully'
-    module.exit_json(**results)
-
-
-if __name__ == '__main__':
-    main()
