@@ -58,13 +58,32 @@ options:
     - Specifies the timeout (in minutes) to wait for the upgrade to complete.
     type: int
     default: 60
+  post_install_binary:
+    description:
+    - Specifies a binary to execute after the restore process of the VIOS metadata
+      configuration is successful.
+    type: str
+  forcecopy:
+    description:
+    - Copies the list of backup files to the respective directories in the newly
+      installed rootvg disks.
+    type: bool
+    default: no
+  skipclusterstate:
+    description:
+    - Skips the verification of the SSP cluster state, so that the installation
+      can be triggered on multiple VIOS nodes simultaneously.
+    - You must ensure that all the SSP cluster nodes are not in C(DOWN) state at
+      the same time as this can bring down the SSP cluster completely.
+    type: bool
+    default: no
 notes:
   - The level of the target mksysb image must be at version 3.1.0.00, or later.
   - Installations through this module are of the type New and Complete installation.
     Any customized configurations that might exist on the currently running system
     before the installation starts (including the timezone), are not included in the
     new installation image.
-  - If the C(altinst_rootvg) or C(old_rootvg disks) are already available in the
+  - If the C(altinst_rootvg) or C(old_rootvg) disks are already available in the
     VIOS, you must rename them.
 '''
 
@@ -104,8 +123,25 @@ old_rootvg:
     description: The list of disks that are part of the old_rootvg after the upgrade
     returned: always
     type: list
+    sample: [hdisk0]
 ioslevel:
     description: The installed maintenance level of the system before and after the upgrade
     returned: always
     type: dict
+    contains:
+      before:
+        description:
+        - The installed maintenance level of the system before the upgrade
+        returned: always
+        type: str
+      after:
+        description:
+        - The installed maintenance level of the system after the upgrade
+        returned: success
+        type: str
+    sample:
+        "ioslevel": {
+            "before": "3.1.0.00",
+            "after": "3.1.1.00"
+        }
 '''

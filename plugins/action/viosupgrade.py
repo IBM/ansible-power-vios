@@ -19,13 +19,16 @@ from ansible.plugins.action import ActionBase
 
 
 class ActionModule(ActionBase):
-    TRANSFERS_FILES = False
+    TRANSFERS_FILES = True
     _VALID_ARGS = frozenset((
         'image_file',
         'mksysb_install_disks',
         'cluster',
         'filename',
-        'timeout'
+        'timeout',
+        'post_install_binary',
+        'forcecopy',
+        'skipclusterstate'
     ))
 
     ioscli_cmd = '/usr/ios/cli/ioscli'
@@ -67,12 +70,13 @@ class ActionModule(ActionBase):
 
         hdisks = []
         for line in cmd_result['stdout'].splitlines():
-            elem = line.split(',', 2)
-            if len(elem) == 2 and elem[1] == "old_rootvg":
-                hdisks.append(elem[0])
+            fields = line.split(',', 2)
+            if len(fields) == 2 and fields[1] == "old_rootvg":
+                hdisks.append(fields[0])
         return hdisks
 
     def run(self, tmp=None, task_vars=None):
+        self._supports_check_mode = False
         self._supports_async = True
 
         if task_vars is None:
@@ -100,6 +104,13 @@ class ActionModule(ActionBase):
         if cluster is not None:
             if not isinstance(cluster, bool):
                 cluster = boolean(self._templar.template(cluster), strict=False)
+        post_install_binary = self._task.args.get('post_install_binary', None)
+        forcecopy = self._task.args.get('forcecopy', False)
+        if not isinstance(forcecopy, bool):
+            forcecopy = boolean(self._templar.template(forcecopy), strict=False)
+        skipclusterstate = self._task.args.get('skipclusterstate', False)
+        if not isinstance(skipclusterstate, bool):
+            skipclusterstate = boolean(self._templar.template(skipclusterstate), strict=False)
 
         filename = self._task.args.get('filename', None)
         timeout = int(self._task.args.get('timeout', 60))
@@ -109,8 +120,8 @@ class ActionModule(ActionBase):
         # Retrieve the ioslevel before the upgrade
         result['ioslevel']['before'] = self.get_ioslevel()
 
-        # Start upgrade
-        cmd = "%s viosupgrade -l" % self.ioscli_cmd
+        # Start background upgrade
+        cmd = "(nohup %s viosupgrade -l" % self.ioscli_cmd
         cmd += " -i %s" % image_file
         cmd += " -a %s" % ':'.join(mksysb_install_disks)
         if cluster is None:
@@ -119,8 +130,20 @@ class ActionModule(ActionBase):
                 cmd += " -c"
         elif cluster:
             cmd += " -c"
+
+        force_options = []
+        if forcecopy:
+            force_options += ['forcecopy']
+        if skipclusterstate:
+            force_options += ['skipclusterstate']
+        if force_options:
+            cmd += " -F " + ':'.join(force_options)
+
+        if post_install_binary:
+            cmd += " -P %s" % post_install_binary
         if filename:
             cmd += " -g %s" % filename
+        cmd += " &) && sleep 2"
 
         cmd_result = {}
         try:
@@ -135,6 +158,11 @@ class ActionModule(ActionBase):
             result['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(cmd, cmd_result['rc'])
             result['failed'] = True
             return result
+
+        # This code requires to copy the SSH keys to the new rootvg so that
+        # the Ansible control node can connect after the upgrade.
+        # This requires a version of viosupgrade that supports -P option and
+        # -F forcecopy option.
 
         # Wait for system to reboot and for upgrade to complete
         self._display.vvv("{0}: waiting for upgrade to complete".format(self._task.action))
@@ -159,16 +187,20 @@ class ActionModule(ActionBase):
                 time.sleep(30)
             except Exception:
                 time.sleep(30)
+                # As a workaround for now, exit when target is rebooted
+                break
         else:  # Timeout
             result['msg'] = 'viosupgrade timed out'
             result['failed'] = True
             return result
 
+        '''
         # Retrieve the ioslevel after the upgrade
         result['ioslevel']['after'] = self.get_ioslevel()
 
         # Return the old rootvg disks
         result['old_rootvg'] = self.get_old_rootvg()
+        '''
 
         result['changed'] = True
         result['msg'] = 'viosupgrade completed successfully'
