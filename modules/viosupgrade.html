@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>alt_root_vg – Create/Cleanup an alternate rootvg disk on a VIOS &mdash; IBM Power Systems VIOS 1.0.2-beta documentation</title>
+  <title>viosupgrade – Upgrades the Virtual I/O Server &mdash; IBM Power Systems VIOS 1.0.2-beta documentation</title>
   
 
   
@@ -38,8 +38,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="backupios – Creates an installable image of the root volume group" href="backupios.html" />
-    <link rel="prev" title="Modules" href="../modules.html" /> 
+    <link rel="next" title="Playbooks" href="../playbooks.html" />
+    <link rel="prev" title="viosecure – Configures security hardening rules and firewall" href="viosecure.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,7 +93,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module reference</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">alt_root_vg – Create/Cleanup an alternate rootvg disk on a VIOS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="alt_root_vg.html">alt_root_vg – Create/Cleanup an alternate rootvg disk on a VIOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backupios.html">backupios – Creates an installable image of the root volume group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="updateios.html">updateios – Updates the Virtual I/O Server to the latest maintenance level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="viosbr.html">viosbr – Backup/Restore the configuration of the VIOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="viosecure.html">viosecure – Configures security hardening rules and firewall</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">viosupgrade – Upgrades the Virtual I/O Server</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
@@ -103,11 +108,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#status">Status</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="backupios.html">backupios – Creates an installable image of the root volume group</a></li>
-<li class="toctree-l3"><a class="reference internal" href="updateios.html">updateios – Updates the Virtual I/O Server to the latest maintenance level</a></li>
-<li class="toctree-l3"><a class="reference internal" href="viosbr.html">viosbr – Backup/Restore the configuration of the VIOS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="viosecure.html">viosecure – Configures security hardening rules and firewall</a></li>
-<li class="toctree-l3"><a class="reference internal" href="viosupgrade.html">viosupgrade – Upgrades the Virtual I/O Server</a></li>
 </ul>
 </li>
 </ul>
@@ -175,14 +175,14 @@
         
           <li><a href="../modules.html">Modules</a> &raquo;</li>
         
-      <li>alt_root_vg – Create/Cleanup an alternate rootvg disk on a VIOS</li>
+      <li>viosupgrade – Upgrades the Virtual I/O Server</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/IBM/ansible-power-vios/blob/dev-collection/docs/source/modules/alt_root_vg.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ansible-power-vios/blob/dev-collection/docs/source/modules/viosupgrade.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -196,8 +196,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="alt-root-vg-create-cleanup-an-alternate-rootvg-disk-on-a-vios">
-<span id="alt-root-vg-module"></span><h1>alt_root_vg – Create/Cleanup an alternate rootvg disk on a VIOS<a class="headerlink" href="#alt-root-vg-create-cleanup-an-alternate-rootvg-disk-on-a-vios" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="viosupgrade-upgrades-the-virtual-i-o-server">
+<span id="viosupgrade-module"></span><h1>viosupgrade – Upgrades the Virtual I/O Server<a class="headerlink" href="#viosupgrade-upgrades-the-virtual-i-o-server" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
@@ -211,13 +211,13 @@
 </div>
 <div class="section" id="synopsis">
 <h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
-<p>Copy the rootvg to an alternate disk or cleanup an existing one.</p>
+<p>Performs the operations of backing up the virtual and logical configuration data, installing the specified image, and restoring the virtual and logical configuration data of the Virtual I/O Server (VIOS).</p>
 </div>
 <div class="section" id="requirements">
 <h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>VIOS &gt;= 2.2.5.0</p></li>
+<li><p>VIOS &gt;= 2.2.6.30</p></li>
 <li><p>Python &gt;= 2.7</p></li>
 </ul>
 </div>
@@ -225,19 +225,26 @@
 <h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><dl>
-<dt>action (optional, str, copy)</dt><dd><p>Specifies the operation to perform on the VIOS.</p>
-<p><code class="docutils literal notranslate"><span class="pre">copy</span></code> to perform and alternate disk copy.</p>
-<p><code class="docutils literal notranslate"><span class="pre">clean</span></code> to cleanup an existing alternate disk copy.</p>
+<dt>image_file (True, str, None)</dt><dd><p>Specifies the image file that must be used for the installation on an alternative disk.</p>
 </dd>
-<dt>targets (optional, list, None)</dt><dd><p>Specifies the target disks.</p>
+<dt>mksysb_install_disks (True, list, None)</dt><dd><p>Specifies the alternative disks to install the available VIOS image.</p>
+<p>The current <code class="docutils literal notranslate"><span class="pre">rootvg</span></code> disk on the VIOS partition is not impacted by this installation. The VIOS partition remains in the running state during the installation of the alternative disk.</p>
+<p>The size of the target disks must be greater than or equal to 30G.</p>
+<p>The disks that are specified must not be in use.</p>
 </dd>
-<dt>disk_size_policy (optional, str, None)</dt><dd><p>When <em>action=copy</em>, specifies how to choose the alternate disk if <em>targets</em> is not specified.</p>
-<p><code class="docutils literal notranslate"><span class="pre">minimize</span></code> smallest disk that can be selected.</p>
-<p><code class="docutils literal notranslate"><span class="pre">upper</span></code> first disk found bigger than the rootvg disk.</p>
-<p><code class="docutils literal notranslate"><span class="pre">lower</span></code> disk size less than rootvg disk size but big enough to contain the used PPs.</p>
-<p><code class="docutils literal notranslate"><span class="pre">nearest</span></code> disk size closest to the rootvg disk.</p>
+<dt>filename (optional, str, None)</dt><dd><p>Specifies the file that contains the list of files that need to be backed up from the current system and saved in the new VIOS installed image. Each line must contain a single filename along with its path. Multiple files must be specified in separate new lines.</p>
 </dd>
-<dt>force (optional, bool, False)</dt><dd><p>Forces removal of any existing alternate disk copy on target disks.</p>
+<dt>cluster (optional, bool, None)</dt><dd><p>Specifies that cluster-level backup and restore operations are performed. Mandatory for a VIOS that is part of an SSP cluster.</p>
+<p>If not set, cluster membership is determined automatically.</p>
+</dd>
+<dt>timeout (optional, int, 60)</dt><dd><p>Specifies the timeout (in minutes) to wait for the upgrade to complete.</p>
+</dd>
+<dt>post_install_binary (optional, str, None)</dt><dd><p>Specifies a binary to execute after the restore process of the VIOS metadata configuration is successful.</p>
+</dd>
+<dt>forcecopy (optional, bool, False)</dt><dd><p>Copies the list of backup files to the respective directories in the newly installed rootvg disks.</p>
+</dd>
+<dt>skipclusterstate (optional, bool, False)</dt><dd><p>Skips the verification of the SSP cluster state, so that the installation can be triggered on multiple VIOS nodes simultaneously.</p>
+<p>You must ensure that all the SSP cluster nodes are not in <code class="docutils literal notranslate"><span class="pre">DOWN</span></code> state at the same time as this can bring down the SSP cluster completely.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -247,35 +254,51 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#alt-root-vg-module"><span class="std std-ref">alt_root_vg</span></a> only backs up mounted file systems. Mount all file systems that you want to back up.</p></li>
-<li><p>when no target is specified, copy is performed to only one alternate disk even if the rootvg contains multiple disks</p></li>
+<li><p>The level of the target mksysb image must be at version 3.1.0.00, or later.</p></li>
+<li><p>Installations through this module are of the type New and Complete installation. Any customized configurations that might exist on the currently running system before the installation starts (including the timezone), are not included in the new installation image.</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">altinst_rootvg</span></code> or <code class="docutils literal notranslate"><span class="pre">old_rootvg</span></code> disks are already available in the VIOS, you must rename them.</p></li>
 </ul>
 </div>
 </div>
 <div class="section" id="examples">
 <h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Perform an alternate disk copy of the rootvg to hdisk1</span>
-  <span class="nt">alt_root_vg</span><span class="p">:</span>
-    <span class="nt">targets</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hdisk1</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Perform the VIOS upgrade operation on new rootvg disks hdisk1 and hdisk2</span>
+  <span class="nt">viosupgrade</span><span class="p">:</span>
+    <span class="nt">image_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mymksysbA</span>
+    <span class="nt">mksysb_install_disks</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">hdisk1</span><span class="p p-Indicator">,</span><span class="nv">hdisk2</span><span class="p p-Indicator">]</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Perform an alternate disk copy of the rootvg to the smallest disk that can be selected</span>
-  <span class="nt">alt_root_vg</span><span class="p">:</span>
-    <span class="nt">disk_size_policy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">minimize</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Upgrade the VIOS that belongs to an SSP cluster</span>
+  <span class="nt">viosupgrade</span><span class="p">:</span>
+    <span class="nt">image_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mymksysbA</span>
+    <span class="nt">mksysb_install_disks</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">hdisk1</span><span class="p p-Indicator">,</span><span class="nv">hdisk2</span><span class="p p-Indicator">]</span>
+    <span class="nt">cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Perform a cleanup of any existing alternate disk copy</span>
-  <span class="nt">alt_root_vg</span><span class="p">:</span>
-    <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">clean</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy files from the current rootvg disk to a newly installed VIOS image</span>
+  <span class="nt">viosupgrade</span><span class="p">:</span>
+    <span class="nt">image_file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mymksysbA</span>
+    <span class="nt">mksysb_install_disks</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">hdisk1</span><span class="p p-Indicator">,</span><span class="nv">hdisk2</span><span class="p p-Indicator">]</span>
+    <span class="nt">filename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">file_list_name</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="return-values">
 <h2><a class="toc-backref" href="#id6">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>msg (always, str, alt_root_vg copy operation completed successfully)</dt><dd><p>The execution message.</p>
+<dl>
+<dt>msg (always, str, )</dt><dd><p>The execution message.</p>
 </dd>
-<dt>stdout (always, str, Bootlist is set to the boot disk: hdisk0 blv=hd5)</dt><dd><p>The standard output</p>
+<dt>stdout (always, str, )</dt><dd><p>The standard output</p>
 </dd>
 <dt>stderr (always, str, )</dt><dd><p>The standard error</p>
+</dd>
+<dt>old_rootvg (always, list, [‘hdisk0’])</dt><dd><p>The list of disks that are part of the old_rootvg after the upgrade</p>
+</dd>
+<dt>ioslevel (always, dict, {‘ioslevel’: {‘before’: ‘3.1.0.00’, ‘after’: ‘3.1.1.00’}})</dt><dd><p>The installed maintenance level of the system before and after the upgrade</p>
+<dl class="simple">
+<dt>before (always, str, )</dt><dd><p>The installed maintenance level of the system before the upgrade</p>
+</dd>
+<dt>after (success, str, )</dt><dd><p>The installed maintenance level of the system after the upgrade</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </div>
@@ -302,10 +325,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="backupios.html" class="btn btn-neutral float-right" title="backupios – Creates an installable image of the root volume group" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../playbooks.html" class="btn btn-neutral float-right" title="Playbooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="viosecure.html" class="btn btn-neutral float-left" title="viosecure – Configures security hardening rules and firewall" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
