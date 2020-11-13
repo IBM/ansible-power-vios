@@ -45,6 +45,12 @@ options:
     - Specifies the device physical location code of a server virtual adapter.
     - Mutually exclusive with I(vadapter).
     type: str
+  cpid:
+    description:
+    - Specifies the client partition ID, in decimal, for which to return device
+      mapping information.
+    - This option is only supported on certain VIOS levels.
+    type: str
   types:
     description:
     - "Specifies the type of devices to display.
@@ -222,9 +228,9 @@ ansible_facts:
           contains:
             clientid:
               description:
-              - Client partition ID.
+              - Client partition ID, in decimal.
               returned: always
-              type: str
+              type: int
             physloc:
               description:
               - The physical location code of the server's virtual adapter.
@@ -264,7 +270,7 @@ ansible_facts:
                   type: str
           sample:
             "vhost0": {
-                "clientid": "0x00000018",
+                "clientid": 24,
                 "physloc": "U8284.22A.21FD4BV-V1-C29",
                 "vtds": {
                     "vtscsi0": {
@@ -303,6 +309,8 @@ def vscsi_mappings(module, mappings):
         cmd += ['-plc', module.params['physloc']]
     else:
         cmd += ['-all']
+    if module.params['cpid']:
+        cmd += ['-cpid', module.params['cpid']]
     if module.params['types']:
         cmd += ['-type']
         cmd += module.params['types']
@@ -325,7 +333,7 @@ def vscsi_mappings(module, mappings):
         svsa = fields[0]
         mapping = {}
         mapping['physloc'] = fields[1]
-        mapping['clientid'] = fields[2]
+        mapping['clientid'] = int(fields[2], 16)
         mapping['vtds'] = {}
         for i in range(3, len(fields), 6):
             if not fields[i]:
@@ -355,6 +363,8 @@ def npiv_mappings(module, mappings):
         cmd += ['-plc', module.params['physloc']]
     else:
         cmd += ['-all']
+    if module.params['cpid']:
+        cmd += ['-cpid', module.params['cpid']]
     cmd += ['-fmt', delimiter]
     ret, stdout, stderr = module.run_command(cmd)
     if ret != 0:
@@ -440,6 +450,7 @@ def main():
             component=dict(type='str', choices=['vscsi', 'net', 'npiv', 'all'], default='all'),
             vadapter=dict(type='str'),
             physloc=dict(type='str'),
+            cpid=dict(type='str'),
             types=dict(type='list', elements='str')
         ),
         mutually_exclusive=[
