@@ -519,7 +519,7 @@ ansible_facts:
               description:
               - Client partition ID (in decimal).
               returned: always
-              type: str
+              type: int
             vtds:
               description:
               - Maps virtual target device name to backing information.
@@ -924,9 +924,7 @@ def cluster_mappings(module, mappings):
             }
         if fields[2]:
             vtd = fields[2]
-            if vtd not in physmap[physloc]['vtds']:
-                physmap[physloc]['vtds'][vtd] = {}
-
+            physmap[physloc]['vtds'][vtd] = {}
             physmap[physloc]['vtds'][vtd]['lun'] = fields[3]
             physmap[physloc]['vtds'][vtd]['backing'] = fields[4]
 
