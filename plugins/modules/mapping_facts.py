@@ -519,6 +519,8 @@ def vnic_mappings(module, mappings):
         cmd += ['-plc', module.params['physloc']]
     else:
         cmd += ['-all']
+    if module.params['cpid']:
+        cmd += ['-cpid', module.params['cpid']]
     cmd += ['-fmt', delimiter]
     ret, stdout, stderr = module.run_command(cmd)
     if ret != 0:
