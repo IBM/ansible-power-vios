@@ -518,7 +518,7 @@ ansible_facts:
             clientid:
               description:
               - Client partition ID (in decimal).
-              returned: always
+              returned: when available
               type: int
             vtds:
               description:
@@ -916,12 +916,13 @@ def cluster_mappings(module, mappings):
 
         physloc = fields[0]
         if physloc not in physmap:
-            # Do the hexadecimal conversion ourselves as not all VIOS levels
-            # support lsmap -dec option.
-            physmap[physloc] = {
-                'clientid': int(fields[1], 16),
-                'vtds': {}
-            }
+            physmap[physloc] = {}
+            physmap[physloc]['vtds'] = {}
+            if fields[1] != 'suspended':
+                # Do the hexadecimal conversion ourselves as not all VIOS levels
+                # support lsmap -dec option.
+                physmap[physloc]['clientid'] = int(fields[1], 16)
+
         if fields[2]:
             vtd = fields[2]
             physmap[physloc]['vtds'][vtd] = {}
