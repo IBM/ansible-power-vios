@@ -31,9 +31,10 @@ options:
     - C(vscsi) to list virtual SCSI devices.
     - C(npiv) to list NPIV devices.
     - C(net) to list shared Ethernet adapters.
+    - C(vnic) to list server virtual NIC adapters.
     - C(all) to list all devices.
     type: str
-    choices: [vscsi, net, npiv, all]
+    choices: [vscsi, net, npiv, vnic, all]
     default: all
   vadapter:
     description:
@@ -96,7 +97,7 @@ ansible_facts:
   contains:
     mappings:
       description:
-      - Contains mappings for NPIV, VSCSI and SEA.
+      - Contains mappings for NPIV, VSCSI, SEA anc VNIC.
       returned: success
       type: dict
       elements: dict
@@ -126,12 +127,12 @@ ansible_facts:
             fc:
               description:
               - Physical fibre channel adapter name.
-              returned: always
+              returned: when available
               type: str
             fcphysloc:
               description:
               - The physical location of the fibre channel adapter.
-              returned: always
+              returned: when available
               type: str
             flags:
               description:
@@ -289,6 +290,67 @@ ansible_facts:
                     }
                 }
             }
+        vnic:
+          description:
+          - Maps server virtual NIC adapter name to backing information.
+          returned: always
+          type: dict
+          elements: dict
+          contains:
+            physloc:
+              description:
+              - The physical location code of the server's virtual adapter.
+              returned: always
+              type: str
+            clntid:
+              description:
+              - Client logical partition ID.
+              returned: always
+              type: int
+            clntname:
+              description:
+              - Client logical partition name.
+              returned: when available
+              type: str
+            clntos:
+              description:
+              - The operating system on the client logical partition.
+              returned: when available
+              type: str
+            backing:
+              description:
+              - Backing device.
+              returned: always
+              type: str
+            status:
+              description:
+              - Server Virtual NIC Adapter status.
+              returned: always
+              type: str
+            bdphysloc:
+              description:
+              - The physical location code of the backing device.
+              returned: always
+              type: str
+            clntdev:
+              description:
+              - The device name on the client logical partition.
+              returned: when available
+              type: str
+            clntphysloc:
+              description:
+              - The physical location code of the client's virtual adapter.
+              returned: always
+              type: str
+          sample:
+            "vnicserver0": {
+                "backing": "ent11",
+                "bdphysloc": "U78CD.001.FZH1998-P1-C1-T1-S2",
+                "clntid": 10,
+                "clntphysloc": "U8284.22A.21FD4BV-V10-C9",
+                "physloc": "U8284.22A.21FD4BV-V17-C32897",
+                "status": "Available"
+            }
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -317,8 +379,8 @@ def vscsi_mappings(module, mappings):
     cmd += ['-fmt', delimiter]
     ret, stdout, stderr = module.run_command(cmd)
     if ret != 0:
-        if (ret == 15 and module.params['component'] != 'vscsi') or ret == 17:
-            return
+        if (ret == 10 or ret == 15) and module.params['component'] != 'vscsi':
+            return  # E_NODEVPHYSLOC or E_NOTSVSA_S
         module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
 
     # List of fields returned by lsmap:
@@ -368,8 +430,8 @@ def npiv_mappings(module, mappings):
     cmd += ['-fmt', delimiter]
     ret, stdout, stderr = module.run_command(cmd)
     if ret != 0:
-        if (ret == 63 and module.params['component'] != 'npiv') or ret == 17:
-            return
+        if (ret == 10 or ret == 63) and module.params['component'] != 'npiv':
+            return  # E_NODEVPHYSLOC or E_NOTSVFCA_S
         module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
 
     # List of fields returned by lsmap -npiv:
@@ -390,8 +452,10 @@ def npiv_mappings(module, mappings):
         if fields[4]:
             mapping['clntos'] = fields[4]
         mapping['status'] = fields[5]
-        mapping['fc'] = fields[6]
-        mapping['fcphysloc'] = fields[7]
+        if fields[6]:
+            mapping['fc'] = fields[6]
+        if fields[7]:
+            mapping['fcphysloc'] = fields[7]
         mapping['ports'] = int(fields[8])
         mapping['flags'] = int(fields[9], 16)
         if fields[10]:
@@ -416,8 +480,8 @@ def net_mappings(module, mappings):
     cmd += ['-fmt', delimiter]
     ret, stdout, stderr = module.run_command(cmd)
     if ret != 0:
-        if (ret == 16 and module.params['component'] != 'net') or ret == 17:
-            return
+        if (ret == 10 or ret == 16) and module.params['component'] != 'net':
+            return  # E_NODEVPHYSLOC or E_NOTSVEA_S
         module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
 
     # List of fields returned by lsmap -net:
@@ -444,10 +508,59 @@ def net_mappings(module, mappings):
         mappings['net'][svea] = mapping
 
 
+def vnic_mappings(module, mappings):
+    """
+    Retrieve VNIC mappings.
+    """
+    cmd = [ioscli_cmd, 'lsmap', '-vnic']
+    if module.params['vadapter']:
+        cmd += ['-vadapter', module.params['vadapter']]
+    elif module.params['physloc']:
+        cmd += ['-plc', module.params['physloc']]
+    else:
+        cmd += ['-all']
+    cmd += ['-fmt', delimiter]
+    ret, stdout, stderr = module.run_command(cmd)
+    if ret != 0:
+        if 'Option flag is not valid' in stderr:
+            return  # Ignore if lsmap -vnic option is not supported
+        if (ret == 10 or ret == 88) and module.params['component'] != 'vnic':
+            return  # E_NODEVPHYSLOC or E_NOT_SVNIC_S
+        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+    # List of fields returned by lsmap -vnic:
+    # name:physloc:clntid:clntname:clntos:backing:status:bdphysloc:clntdev:clntphysloc
+    mappings['vnic'] = {}
+    for line in stdout.splitlines():
+        raw_fields = line.split(delimiter)
+        if len(raw_fields) < 10:
+            continue
+        fields = [field.strip() for field in raw_fields]
+
+        name = fields[0]
+        mapping = {}
+        mapping['physloc'] = fields[1]
+        if fields[2] != 'N/A':
+            mapping['clntid'] = int(fields[2])
+        if fields[3] != 'N/A':
+            mapping['clntname'] = fields[3]
+        if fields[4] != 'N/A':
+            mapping['clntos'] = fields[4]
+        if fields[5] != 'N/A':
+            mapping['backing'] = fields[5]
+        mapping['status'] = fields[6]
+        mapping['bdphysloc'] = fields[7]
+        if fields[8] != 'N/A':
+            mapping['clntdev'] = fields[8]
+        mapping['clntphysloc'] = fields[9]
+
+        mappings['vnic'][name] = mapping
+
+
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            component=dict(type='str', choices=['vscsi', 'net', 'npiv', 'all'], default='all'),
+            component=dict(type='str', choices=['vscsi', 'net', 'npiv', 'vnic', 'all'], default='all'),
             vadapter=dict(type='str'),
             physloc=dict(type='str'),
             cpid=dict(type='str'),
@@ -470,6 +583,8 @@ def main():
             npiv_mappings(module, mappings)
         if component == 'all' or component == 'net':
             net_mappings(module, mappings)
+        if component == 'all' or component == 'vnic':
+            vnic_mappings(module, mappings)
 
     results = dict(ansible_facts=dict(mappings=mappings))
 
