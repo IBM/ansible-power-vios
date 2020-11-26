@@ -24,7 +24,7 @@ shift
 opts="$@"
 
 if [ -n "$filename" ]; then
-    backup_file=/tmp/.ansible_viosupgrade_backup
+    backup_file=%tmpdir%/viosupg.backup
     if [ "$filename" == "-" ]; then
         > $backup_file
     else
@@ -168,8 +168,8 @@ class ActionModule(ActionBase):
             wait_completion = True
 
         # Transfer the script to the target
-        script_path = '/tmp/.ansible_viosupg.sh'
-        self._transfer_data(script_path, SCRIPT)
+        script_path = self._connection._shell.join_path(self._connection._shell.tmpdir, 'viosupg.sh')
+        self._transfer_data(script_path, SCRIPT.replace('%tmpdir%', self._connection._shell.tmpdir))
         self._fixup_perms2((self._connection._shell.tmpdir, script_path))
 
         # Start background upgrade
