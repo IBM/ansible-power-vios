@@ -230,12 +230,12 @@ class ActionModule(ActionBase):
                             result['msg'] = 'viosupgrade failed'
                             result['failed'] = True
                             return result
+                        elif 'in progress' in state and not wait_completion:
+                            result['changed'] = True
+                            result['msg'] = 'viosupgrade started successfully'
+                            return result
                 time.sleep(30)
             except Exception:
-                if not wait_completion:
-                    result['changed'] = True
-                    result['msg'] = 'viosupgrade started successfully'
-                    return result
                 time.sleep(30)
         else:  # Timeout
             result['msg'] = 'viosupgrade timed out'
