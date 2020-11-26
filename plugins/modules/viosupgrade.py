@@ -75,7 +75,8 @@ options:
   wait_reboot:
     description:
     - Waits for the system to reboot and for the upgrade to complete.
-    - Only usable when the remote user is root and the transport is ssh.
+    - Only usable when the remote user is root and the transport is ssh with
+      public key authentication.
     - Copies SSH host identification and root user SSH authorized_keys file to
       the newly installed rootvg disks.
     type: bool
