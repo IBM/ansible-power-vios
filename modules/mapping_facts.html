@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mapping_facts – Returns the mapping between physical, logical, and virtual devices as facts &mdash; IBM Power Systems VIOS 1.0.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="updateios – Updates the Virtual I/O Server to the latest maintenance level" href="updateios.html" />
+    <link rel="prev" title="backupios – Creates an installable image of the root volume group" href="backupios.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> IBM Power Systems VIOS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module reference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="alt_root_vg.html">alt_root_vg – Create/Cleanup an alternate rootvg disk on a VIOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backupios.html">backupios – Creates an installable image of the root volume group</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">mapping_facts – Returns the mapping between physical, logical, and virtual devices as facts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#status">Status</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="updateios.html">updateios – Updates the Virtual I/O Server to the latest maintenance level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="viosbr.html">viosbr – Backup/Restore the configuration of the VIOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="viosecure.html">viosecure – Configures security hardening rules and firewall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="viosupgrade.html">viosupgrade – Upgrades the Virtual I/O Server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks.html">Playbooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roles.html">Roles</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">Requirements</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">IBM Power Systems VIOS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../modules.html">Modules</a> &raquo;</li>
+        
+      <li>mapping_facts – Returns the mapping between physical, logical, and virtual devices as facts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/IBM/ansible-power-vios/blob/dev-collection/docs/source/modules/mapping_facts.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mapping-facts-returns-the-mapping-between-physical-logical-and-virtual-devices-as-facts">
+<span id="mapping-facts-module"></span><h1>mapping_facts – Returns the mapping between physical, logical, and virtual devices as facts<a class="headerlink" href="#mapping-facts-returns-the-mapping-between-physical-logical-and-virtual-devices-as-facts" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id4">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id5">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#status" id="id6">Status</a></p></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Returns information about the mapping between the virtual host adapters and the physical devices they are backed to.</p>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p>VIOS &gt;= 2.2.5.0</p></li>
+<li><p>Python &gt;= 2.7</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl>
+<dt>component (optional, str, all)</dt><dd><p>Specifies the type of devices to retrieve information for.</p>
+<p><code class="docutils literal notranslate"><span class="pre">vscsi</span></code> to list virtual SCSI devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">npiv</span></code> to list NPIV devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">net</span></code> to list shared Ethernet adapters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">vnic</span></code> to list server virtual NIC adapters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ams</span></code> to list paging space devices that are used in active memory sharing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">suspend</span></code> to list suspended virtual adapters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cluster</span></code> to list shared storage pool mappings</p>
+<p><code class="docutils literal notranslate"><span class="pre">all</span></code> to list all devices.</p>
+</dd>
+<dt>vadapter (optional, str, None)</dt><dd><p>Specifies the device name of a server virtual adapter.</p>
+<p>Mutually exclusive with <em>physloc</em>.</p>
+</dd>
+<dt>physloc (optional, str, None)</dt><dd><p>Specifies the device physical location code of a server virtual adapter.</p>
+<p>Mutually exclusive with <em>vadapter</em>.</p>
+</dd>
+<dt>vtd (optional, str, None)</dt><dd><p>Specifies the active memory sharing (AMS) paging device to be displayed.</p>
+</dd>
+<dt>hostname (optional, str, None)</dt><dd><p>Specifies the host name or IP address of the VIOS partition.</p>
+</dd>
+<dt>cpid (optional, str, None)</dt><dd><p>Specifies the client partition ID, in decimal, for which to return device mapping information.</p>
+<p>This option is only supported on certain VIOS levels.</p>
+</dd>
+<dt>types (optional, list, None)</dt><dd><p>Specifies the type of devices to display. The following types are supported:</p>
+<p><code class="docutils literal notranslate"><span class="pre">disk</span></code> to list physical backing devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">lv</span></code> to list logical volume backing devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">optical</span></code> to list optical backing devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tape</span></code> to list tape backed devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">file</span></code> to list file backed devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">file_disk</span></code> to list file backed disk devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">file_opt</span></code> to list file backed optical devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cl_disk</span></code> to list clustered backing devices.</p>
+<p><code class="docutils literal notranslate"><span class="pre">usb_disk</span></code> to list USB disks.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gather the mapping facts</span>
+  <span class="nt">mapping_facts</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Print the mapping facts</span>
+  <span class="nt">debug</span><span class="p">:</span>
+    <span class="nt">var</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ansible_facts.mappings</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Populate the mapping facts with the mapping information for</span>
+        <span class="l l-Scalar l-Scalar-Plain">NPIV device vfchost0</span>
+  <span class="nt">mapping_facts</span><span class="p">:</span>
+    <span class="nt">component</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">npiv</span>
+    <span class="nt">vadapter</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vfchost0</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Populate the mapping facts with the mapping information for</span>
+        <span class="l l-Scalar l-Scalar-Plain">optical backing devices</span>
+  <span class="nt">mapping_facts</span><span class="p">:</span>
+    <span class="nt">types</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">optical</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id5">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>ansible_facts (always, complex, )</dt><dd><p>Facts to add to ansible_facts about the mapping between physical, logical, and virtual devices.</p>
+<dl>
+<dt>mappings (success, dict, )</dt><dd><p>Contains mappings for NPIV, VSCSI, SEA, VNIC, AMS, SSP and suspend.</p>
+<dl>
+<dt>npiv (always, dict, {‘npiv’: {‘vfchost18’: {‘clntid’: 19, ‘clntname’: ‘lpar19’, ‘clntos’: ‘AIX’, ‘fc’: ‘fcs1’, ‘fcphysloc’: ‘U78CD.001.FZH1998-P1-C6-T2’, ‘flags’: 10, ‘physloc’: ‘U8284.22A.21FD4BV-V1-C26’, ‘ports’: 3, ‘status’: ‘LOGGED_IN’, ‘vfcclient’: ‘fcs0’, ‘vfcclientdrc’: ‘U8284.22A.21FD4BV-V19-C3’}}})</dt><dd><p>Maps virtual fibre channel adapter name to backing information.</p>
+<dl class="simple">
+<dt>clntid (always, int, )</dt><dd><p>Client logical partition ID.</p>
+</dd>
+<dt>clntname (when available, str, )</dt><dd><p>Client logical partition name.</p>
+</dd>
+<dt>clntos (when available, str, )</dt><dd><p>The operating system on the client logical partition.</p>
+</dd>
+<dt>fc (when available, str, )</dt><dd><p>Physical fibre channel adapter name.</p>
+</dd>
+<dt>fcphysloc (when available, str, )</dt><dd><p>The physical location of the fibre channel adapter.</p>
+</dd>
+<dt>flags (always, int, )</dt><dd><p>Virtual fibre channel adapter flags.</p>
+</dd>
+<dt>physloc (always, str, )</dt><dd><p>The physical location code of the server virtual fibre channel adapter.</p>
+</dd>
+<dt>ports (always, int, )</dt><dd><p>Physical fibre channel port number.</p>
+</dd>
+<dt>status (always, str, )</dt><dd><p>Virtual fibre channel adapter status.</p>
+</dd>
+<dt>vfcclient (when available, str, )</dt><dd><p>Client virtual fibre channel adapter name.</p>
+</dd>
+<dt>vfcclientdrc (when available, str, )</dt><dd><p>Client virtual fibre channel adapter used for Dynamic Reconfiguration Connection (DRC).</p>
+</dd>
+</dl>
+</dd>
+<dt>net (always, dict, {‘net’: {‘ent4’: {‘backing’: ‘ent3’, ‘bdphysloc’: ‘U78CB.001.WZS09RT-P1-C2-T4’, ‘physloc’: ‘U8284.22A.21FD4BV-V1-C2-T1’, ‘sea’: ‘ent5’, ‘status’: ‘Available’}}})</dt><dd><p>Maps virtual ethernet adapter name to backing information.</p>
+<dl class="simple">
+<dt>backing (always, str, )</dt><dd><p>Backing device.</p>
+</dd>
+<dt>bdphysloc (when available, str, )</dt><dd><p>The physical location code of the backing device.</p>
+</dd>
+<dt>physloc (always, str, )</dt><dd><p>The physical location code of the server virtual adapter.</p>
+</dd>
+<dt>sea (when available, str, )</dt><dd><p>Shared Ethernet adapter.</p>
+</dd>
+<dt>status (when available, str, )</dt><dd><p>Shared Ethernet adapter status.</p>
+</dd>
+</dl>
+</dd>
+<dt>vscsi (always, dict, {‘vscsi’: {‘vhost0’: {‘clientid’: 24, ‘physloc’: ‘U8284.22A.21FD4BV-V1-C29’, ‘vtds’: {‘vtscsi0’: {‘backing’: ‘hdisk4’, ‘bdphysloc’: ‘U78CD.001.FZH1998-P1-C6-T2-W500507680B215660-L0’, ‘lun’: ‘0x8100000000000000’, ‘mirrored’: False, ‘status’: ‘Available’}, ‘vtscsi2’: {‘backing’: ‘hdisk5’, ‘bdphysloc’: ‘U78CD.001.FZH1998-P1-C6-T2-W500507680B215660-L1000000000000’, ‘lun’: ‘0x8200000000000000’, ‘mirrored’: False, ‘status’: ‘Available’}}}}})</dt><dd><p>Maps server virtual SCSI adapter name to backing information.</p>
+<dl>
+<dt>clientid (always, int, )</dt><dd><p>Client partition ID, in decimal.</p>
+</dd>
+<dt>physloc (always, str, )</dt><dd><p>The physical location code of the server’s virtual adapter.</p>
+</dd>
+<dt>vtds (always, dict, )</dt><dd><p>Maps virtual target device name to backing information.</p>
+<dl class="simple">
+<dt>backing (always, str, )</dt><dd><p>Backing device.</p>
+</dd>
+<dt>bdphysloc (always, str, )</dt><dd><p>The physical location code of the backing device.</p>
+</dd>
+<dt>lun (always, str, )</dt><dd><p>Logical unit number.</p>
+</dd>
+<dt>mirrored (when available, bool, )</dt><dd><p>The backing device is part of a Peer-to-Peer Remote Copy (PPRC) pair.</p>
+</dd>
+<dt>status (always, str, )</dt><dd><p>Virtual target device status.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>vnic (always, dict, {‘vnic’: {‘vnicserver0’: {‘backing’: ‘ent11’, ‘bdphysloc’: ‘U78CD.001.FZH1998-P1-C1-T1-S2’, ‘clntid’: 10, ‘clntphysloc’: ‘U8284.22A.21FD4BV-V10-C9’, ‘physloc’: ‘U8284.22A.21FD4BV-V17-C32897’, ‘status’: ‘Available’}}})</dt><dd><p>Maps server virtual NIC adapter name to backing information.</p>
+<dl class="simple">
+<dt>physloc (always, str, )</dt><dd><p>The physical location code of the server’s virtual adapter.</p>
+</dd>
+<dt>clntid (always, int, )</dt><dd><p>Client logical partition ID.</p>
+</dd>
+<dt>clntname (when available, str, )</dt><dd><p>Client logical partition name.</p>
+</dd>
+<dt>clntos (when available, str, )</dt><dd><p>The operating system on the client logical partition.</p>
+</dd>
+<dt>backing (always, str, )</dt><dd><p>Backing device.</p>
+</dd>
+<dt>status (always, str, )</dt><dd><p>Server Virtual NIC Adapter status.</p>
+</dd>
+<dt>bdphysloc (always, str, )</dt><dd><p>The physical location code of the backing device.</p>
+</dd>
+<dt>clntdev (when available, str, )</dt><dd><p>The device name on the client logical partition.</p>
+</dd>
+<dt>clntphysloc (always, str, )</dt><dd><p>The physical location code of the client’s virtual adapter.</p>
+</dd>
+</dl>
+</dd>
+<dt>ams (always, dict, {‘ams’: {‘vrmpage0’: {‘backing’: ‘hdisk3’, ‘clntid’: 0, ‘poolid’: ‘0’, ‘redundancy’: False, ‘status’: ‘inactive’, ‘streamid’: ‘0x20000161d21db4b7’}}})</dt><dd><p>Maps paging virtual target device name to backing information.</p>
+<dl class="simple">
+<dt>streamid (always, str, )</dt><dd><p>Stream ID.</p>
+</dd>
+<dt>clientid (always, int, )</dt><dd><p>Client logical partition ID (in decimal).</p>
+</dd>
+<dt>status (always, str, )</dt><dd><p>Paging virtual target device status.</p>
+</dd>
+<dt>redundancy (always, bool, )</dt><dd><p>Redundancy usage for the paging VIOS logical partitions.</p>
+</dd>
+<dt>backing (always, str, )</dt><dd><p>Backing device.</p>
+</dd>
+<dt>poolid (always, str, )</dt><dd><p>Memory pool ID.</p>
+</dd>
+<dt>vasi (when available, str, )</dt><dd><p>Virtual Asynchronous Services Interface (VASI) device name.</p>
+</dd>
+<dt>pager (when available, str, )</dt><dd><p>Pager device name.</p>
+</dd>
+<dt>vbsd (when available, str, )</dt><dd><p>Virtual Block Storage Device (VBSD) name.</p>
+</dd>
+</dl>
+</dd>
+<dt>suspend (always, dict, {‘suspend’: {‘susadpt0’: {‘clientid’: 17, ‘clientname’: ‘17*9117-MMB*10002EP’, ‘state’: ‘suspended’, ‘streamid’: ‘0xf70e4facfc46e9a0’, ‘vtds’: {‘vtscsi1’: {‘backing’: ‘hdisk6’, ‘bdphysloc’: ‘U789D.001.DQDWAXR-P1-C4-T1-W205600A0B86E4A5A-L5000000000000’, ‘lun’: ‘0x8200000000000000’, ‘mirrored’: False, ‘status’: ‘Defined’}}}}})</dt><dd><p>Maps suspended virtual adapter name to backing information.</p>
+<dl>
+<dt>state (always, str, )</dt><dd><p>Suspended virtual adapter state.</p>
+</dd>
+<dt>clientname (when available, str, )</dt><dd><p>Client name.</p>
+</dd>
+<dt>streamid (always, str, )</dt><dd><p>Stream ID.</p>
+</dd>
+<dt>clientid (always, int, )</dt><dd><p>Client partition ID (in decimal).</p>
+</dd>
+<dt>vtds (always, dict, )</dt><dd><p>Maps virtual target device name to backing information.</p>
+<dl class="simple">
+<dt>status (always, str, )</dt><dd><p>Virtual target device status.</p>
+</dd>
+<dt>lun (when available, str, )</dt><dd><p>Logical unit number.</p>
+</dd>
+<dt>backing (when available, str, )</dt><dd><p>Backing device.</p>
+</dd>
+<dt>bdphysloc (when available, str, )</dt><dd><p>he physical location code of the backing device.</p>
+</dd>
+<dt>mirrored (when available, bool, )</dt><dd><p>The backing device is part of a Peer-to-Peer Remote Copy (PPRC) pair.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>cluster (always, dict, {‘cluster’: {‘mycluster’: {‘U8233.E8B.HV32001-V2-C2’: {‘clientid’: 0, ‘vtds’: {‘vtscsi0’: {‘backing’: ‘testLU1.b1277fffdd5f38acb365413b55e51638’, ‘lun’: ‘0x8100000000000000’}, ‘vtscsi1’: {‘backing’: ‘testLU2.8f5a2c27dce01bf443383a01c7f723d0’, ‘lun’: ‘0x8200000000000000’}}}, ‘U9179.MHB.10A9DAP-V4-C111’: {‘clientid’: 0, ‘vtds’: {‘vtscsi0’: {‘backing’: ‘testLU4.ad089db46c2dc3769e71bf7875607c6f’, ‘lun’: ‘0x8100000000000000’}}}}}})</dt><dd><p>Maps physical location code of the server virtual adapter to backing information.</p>
+<dl>
+<dt>clientid (when available, int, )</dt><dd><p>Client partition ID (in decimal).</p>
+</dd>
+<dt>vtds (always, dict, )</dt><dd><p>Maps virtual target device name to backing information.</p>
+<dl class="simple">
+<dt>backing (always, str, )</dt><dd><p>Backing device.</p>
+</dd>
+<dt>lun (always, str, )</dt><dd><p>Logical unit number.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id6">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>This module is not guaranteed to have a backwards compatible interface. <em>[preview]</em></p></li>
+<li><p>This module is maintained by community.</p></li>
+</ul>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>AIX Development Team (&#64;pbfinley1911)</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="updateios.html" class="btn btn-neutral float-right" title="updateios – Updates the Virtual I/O Server to the latest maintenance level" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="backupios.html" class="btn btn-neutral float-left" title="backupios – Creates an installable image of the root volume group" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, IBM
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
