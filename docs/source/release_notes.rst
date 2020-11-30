@@ -5,6 +5,44 @@
 Releases
 ========
 
+Version 1.1.2
+--------------
+Notes
+  * mapping_facts: reports VIOS mappings (lsmap command) as Ansible facts
+
+Availability
+  * `Automation Hub v1.1.2`_
+  * `Galaxy v1.1.2`_
+  * `GitHub v1.1.2`_
+
+.. _Automation Hub v1.1.2:
+   https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios
+
+.. _Galaxy v1.1.2:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.1.2.tar.gz
+
+.. _GitHub v1.1.2:
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.1.2/ibm-power_vios-1.1.2.tar.gz
+
+Version 1.1.1
+--------------
+Notes
+  * Includes viosupgrade plugin (async actions)
+
+Availability
+  * `Automation Hub v1.1.1`_
+  * `Galaxy v1.1.1`_
+  * `GitHub v1.1.1`_
+
+.. _Automation Hub v1.1.1:
+   https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios
+
+.. _Galaxy v1.1.1:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.1.1.tar.gz
+
+.. _GitHub v1.1.1:
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.1.0/ibm-power_vios-1.1.1.tar.gz
+
 Version 1.1.0
 ------------------
 Notes
