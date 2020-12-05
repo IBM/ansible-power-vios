@@ -21,7 +21,6 @@ description:
 version_added: '2.9'
 requirements:
 - VIOS >= 2.2.6.30
-- Python >= 2.7
 options:
   image_file:
     description:
@@ -46,6 +45,8 @@ options:
       backed up from the current system and saved in the new VIOS installed
       image. Each line must contain a single filename along with its path.
       Multiple files must be specified in separate new lines.
+    - The files are copied to the respective directories in the newly
+      installed rootvg disks.
     type: str
   cluster:
     description:
@@ -63,12 +64,6 @@ options:
     - Specifies a binary to execute after the restore process of the VIOS metadata
       configuration is successful.
     type: str
-  forcecopy:
-    description:
-    - Copies the list of backup files to the respective directories in the newly
-      installed rootvg disks.
-    type: bool
-    default: no
   skipclusterstate:
     description:
     - Skips the verification of the SSP cluster state, so that the installation
@@ -77,6 +72,15 @@ options:
       the same time as this can bring down the SSP cluster completely.
     type: bool
     default: no
+  wait_reboot:
+    description:
+    - Waits for the system to reboot and for the upgrade to complete.
+    - Only usable when the remote user is root and the transport is ssh with
+      public key authentication.
+    - Copies SSH host identification and root user SSH authorized_keys file to
+      the newly installed rootvg disks.
+    type: bool
+    default: yes
 notes:
   - The level of the target mksysb image must be at version 3.1.0.00, or later.
   - Installations through this module are of the type New and Complete installation.
@@ -85,6 +89,7 @@ notes:
     new installation image.
   - If the C(altinst_rootvg) or C(old_rootvg) disks are already available in the
     VIOS, you must rename them.
+  - This module does not require Python to be installed on the target VIOS.
 '''
 
 EXAMPLES = r'''

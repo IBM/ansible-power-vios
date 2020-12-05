@@ -12,10 +12,37 @@ import re
 import time
 
 from datetime import datetime, timedelta
+from shlex import quote
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.parsing.convert_bool import boolean
 from ansible.plugins.action import ActionBase
+
+SCRIPT='''
+filename=$1
+shift
+opts="$@"
+
+if [ -n "$filename" ]; then
+    backup_file=%tmpdir%/viosupg.backup
+    if [ "$filename" == "-" ]; then
+        > $backup_file
+    else
+        cp "$filename" $backup_file
+    fi
+    # Preserve SSH host identification during upgrade
+    ls /etc/ssh/ssh_host* >> $backup_file
+    ls /etc/ssh/sshd_config >> $backup_file
+    # Preserve SSH authorized keys of the user during upgrade
+    ls ~/.ssh/authorized_keys* >> $backup_file
+
+    opts="$opts -g $backup_file"
+fi
+
+nohup /usr/ios/cli/ioscli viosupgrade -l $opts &
+sleep 5
+exit 0
+'''
 
 
 class ActionModule(ActionBase):
@@ -27,8 +54,8 @@ class ActionModule(ActionBase):
         'filename',
         'timeout',
         'post_install_binary',
-        'forcecopy',
-        'skipclusterstate'
+        'skipclusterstate',
+        'wait_reboot'
     ))
 
     ioscli_cmd = '/usr/ios/cli/ioscli'
@@ -59,9 +86,9 @@ class ActionModule(ActionBase):
         cmd_result = self._low_level_execute_command(cmd)
         return cmd_result['rc'] == 0
 
-    def get_old_rootvg(self):
+    def get_vg_disks(self, vgname):
         """
-        Return the list of hdisks that belong to old_rootvg.
+        Return the list of hdisks that belong to the specified VG.
         """
         cmd = "%s lspv -field NAME VG -fmt ," % self.ioscli_cmd
         cmd_result = self._low_level_execute_command(cmd)
@@ -71,7 +98,7 @@ class ActionModule(ActionBase):
         hdisks = []
         for line in cmd_result['stdout'].splitlines():
             fields = line.split(',', 2)
-            if len(fields) == 2 and fields[1] == "old_rootvg":
+            if len(fields) == 2 and fields[1] == vgname:
                 hdisks.append(fields[0])
         return hdisks
 
@@ -105,12 +132,12 @@ class ActionModule(ActionBase):
             if not isinstance(cluster, bool):
                 cluster = boolean(self._templar.template(cluster), strict=False)
         post_install_binary = self._task.args.get('post_install_binary', None)
-        forcecopy = self._task.args.get('forcecopy', False)
-        if not isinstance(forcecopy, bool):
-            forcecopy = boolean(self._templar.template(forcecopy), strict=False)
         skipclusterstate = self._task.args.get('skipclusterstate', False)
         if not isinstance(skipclusterstate, bool):
             skipclusterstate = boolean(self._templar.template(skipclusterstate), strict=False)
+        wait_reboot = self._task.args.get('wait_reboot', True)
+        if not isinstance(wait_reboot, bool):
+            wait_reboot = boolean(self._templar.template(wait_reboot), strict=False)
 
         filename = self._task.args.get('filename', None)
         timeout = int(self._task.args.get('timeout', 60))
@@ -120,10 +147,42 @@ class ActionModule(ActionBase):
         # Retrieve the ioslevel before the upgrade
         result['ioslevel']['before'] = self.get_ioslevel()
 
+        # Retrieve viosupgrade supported options from usage
+        cmd = "%s viosupgrade -h" % self.ioscli_cmd
+        cmd_result = self._low_level_execute_command(cmd)
+        if cmd_result['rc'] != 0:
+            result['stdout'] = cmd_result['stdout']
+            result['stderr'] = cmd_result['stderr']
+            result['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(cmd, cmd_result['rc'])
+            result['failed'] = True
+            return result
+
+        has_g_opt = re.search(r"^-g\s+", cmd_result['stdout'], re.MULTILINE) != None
+        has_F_opt = re.search(r"^-F\s+", cmd_result['stdout'], re.MULTILINE) != None
+        has_P_opt = re.search(r"^-P\s+", cmd_result['stdout'], re.MULTILINE) != None
+
+        ruser = self._get_remote_user()
+        wait_completion = False
+        if (has_F_opt and has_g_opt and wait_reboot and
+            self._connection.transport == 'ssh' and (not ruser or ruser == 'root')):
+            wait_completion = True
+
+        # Transfer the script to the target
+        script_path = self._connection._shell.join_path(self._connection._shell.tmpdir, 'viosupg.sh')
+        self._transfer_data(script_path, SCRIPT.replace('%tmpdir%', self._connection._shell.tmpdir))
+        self._fixup_perms2((self._connection._shell.tmpdir, script_path))
+
         # Start background upgrade
-        cmd = "(nohup %s viosupgrade -l" % self.ioscli_cmd
-        cmd += " -i %s" % image_file
-        cmd += " -a %s" % ':'.join(mksysb_install_disks)
+        cmd = "/bin/sh %s" % script_path
+        # We do not support filename without forcecopy
+        if has_F_opt and has_g_opt and filename:
+            cmd += " %s" % quote(filename)
+        elif wait_completion:
+            cmd += " -"
+        else:
+            cmd += " ''"
+        cmd += " -i %s" % quote(image_file)
+        cmd += " -a %s" % quote(':'.join(mksysb_install_disks))
         if cluster is None:
             # cluster not explicitly set, try to determine membership
             if self.cluster_membership():
@@ -131,40 +190,27 @@ class ActionModule(ActionBase):
         elif cluster:
             cmd += " -c"
 
-        force_options = []
-        if forcecopy:
-            force_options += ['forcecopy']
-        if skipclusterstate:
-            force_options += ['skipclusterstate']
-        if force_options:
-            cmd += " -F " + ':'.join(force_options)
+        if has_F_opt:
+            force_options = []
+            if (has_g_opt and filename) or wait_completion:
+                force_options += ['forcecopy']
+            if skipclusterstate:
+                force_options += ['skipclusterstate']
+            if force_options:
+                cmd += " -F %s" % ':'.join(force_options)
 
-        if post_install_binary:
-            cmd += " -P %s" % post_install_binary
-        if filename:
-            cmd += " -g %s" % filename
-        cmd += " &) && sleep 2"
+        if has_P_opt and post_install_binary:
+            cmd += " -P %s" % quote(post_install_binary)
 
-        cmd_result = {}
-        try:
-            cmd_result = self._low_level_execute_command(cmd)
-        except AnsibleConnectionFailure:
-            self._display.vvv("{0}: connection closed".format(self._task.action))
-            # Connection got closed because of system shutdown, ignore
-            cmd_result['rc'] = 0
-        result['stdout'] = cmd_result['stdout']
-        result['stderr'] = cmd_result['stderr']
+        cmd_result = self._low_level_execute_command(cmd)
         if cmd_result['rc'] != 0:
+            result['stdout'] = cmd_result['stdout']
+            result['stderr'] = cmd_result['stderr']
             result['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(cmd, cmd_result['rc'])
             result['failed'] = True
             return result
 
-        # This code requires to copy the SSH keys to the new rootvg so that
-        # the Ansible control node can connect after the upgrade.
-        # This requires a version of viosupgrade that supports -P option and
-        # -F forcecopy option.
-
-        # Wait for system to reboot and for upgrade to complete
+        # Wait for the target to reboot and for the upgrade to complete
         self._display.vvv("{0}: waiting for upgrade to complete".format(self._task.action))
         max_end_time = datetime.utcnow() + timedelta(minutes=timeout)
         while datetime.utcnow() < max_end_time:
@@ -184,25 +230,24 @@ class ActionModule(ActionBase):
                             result['msg'] = 'viosupgrade failed'
                             result['failed'] = True
                             return result
+                        elif 'in progress' in state and not wait_completion:
+                            result['changed'] = True
+                            result['msg'] = 'viosupgrade started successfully'
+                            return result
                 time.sleep(30)
             except Exception:
                 time.sleep(30)
-                # As a workaround for now, exit when target is rebooted
-                break
         else:  # Timeout
             result['msg'] = 'viosupgrade timed out'
             result['failed'] = True
             return result
 
-        '''
         # Retrieve the ioslevel after the upgrade
         result['ioslevel']['after'] = self.get_ioslevel()
 
         # Return the old rootvg disks
-        result['old_rootvg'] = self.get_old_rootvg()
-        '''
+        result['old_rootvg'] = self.get_vg_disks('old_rootvg')
 
         result['changed'] = True
         result['msg'] = 'viosupgrade completed successfully'
-
         return result
