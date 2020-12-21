@@ -5,6 +5,28 @@
 Releases
 ========
 
+Version 1.2.0
+--------------
+Notes
+  * mapping_facts: reports VIOS mappings (lsmap command) as Ansible facts
+  * updateios: fix automated answer to updateios command (issue #6 )
+  * viosupgrade: option for wait upon reboot
+  * viosupgrade: documenting ssh pubkey support and use of ansible tmpdir
+
+Availability
+  * `Automation Hub v1.2.0`_
+  * `Galaxy v1.2.0`_
+  * `GitHub v1.2.0`_
+
+.. _Automation Hub v1.2.0:
+   https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios
+
+.. _Galaxy v1.2.0:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.2.0.tar.gz
+
+.. _GitHub v1.2.0:
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.2.0/ibm-power_vios-1.2.0.tar.gz
+
 Version 1.1.2
 --------------
 Notes
