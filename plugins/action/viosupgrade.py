@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2020- IBM, Inc
@@ -18,7 +18,7 @@ from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.parsing.convert_bool import boolean
 from ansible.plugins.action import ActionBase
 
-SCRIPT='''
+SCRIPT = '''
 filename=$1
 shift
 opts="$@"
