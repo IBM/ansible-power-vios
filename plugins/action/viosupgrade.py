@@ -157,14 +157,14 @@ class ActionModule(ActionBase):
             result['failed'] = True
             return result
 
-        has_g_opt = re.search(r"^-g\s+", cmd_result['stdout'], re.MULTILINE) != None
-        has_F_opt = re.search(r"^-F\s+", cmd_result['stdout'], re.MULTILINE) != None
-        has_P_opt = re.search(r"^-P\s+", cmd_result['stdout'], re.MULTILINE) != None
+        has_g_opt = re.search(r"^-g\s+", cmd_result['stdout'], re.MULTILINE) is not None
+        has_F_opt = re.search(r"^-F\s+", cmd_result['stdout'], re.MULTILINE) is not None
+        has_P_opt = re.search(r"^-P\s+", cmd_result['stdout'], re.MULTILINE) is not None
 
         ruser = self._get_remote_user()
         wait_completion = False
         if (has_F_opt and has_g_opt and wait_reboot and
-            self._connection.transport == 'ssh' and (not ruser or ruser == 'root')):
+                self._connection.transport == 'ssh' and (not ruser or ruser == 'root')):
             wait_completion = True
 
         # Transfer the script to the target
