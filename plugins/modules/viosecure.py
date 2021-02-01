@@ -88,7 +88,7 @@ options:
                 - Specifies that the port is a remote port.
                 - All the IP activity to and from that remote port is allowed.
                 type: bool
-                default: no
+                default: false
               address:
                 description:
                 - IP address.
@@ -152,7 +152,7 @@ EXAMPLES = r'''
         rules:
         - present: yes
           port: 514
-          remote: yes
+          remote: True
           interface: "en0"
 
 - name: Load default firewall rules
