@@ -21,7 +21,6 @@ Requirements
 The below requirements are needed on the host that executes this module.
 
 - VIOS >= 2.2.6.30
-- Python >= 2.7
 
 
 
@@ -45,6 +44,8 @@ Parameters
   filename (optional, str, None)
     Specifies the file that contains the list of files that need to be backed up from the current system and saved in the new VIOS installed image. Each line must contain a single filename along with its path. Multiple files must be specified in separate new lines.
 
+    The files are copied to the respective directories in the newly installed rootvg disks.
+
 
   cluster (optional, bool, None)
     Specifies that cluster-level backup and restore operations are performed. Mandatory for a VIOS that is part of an SSP cluster.
@@ -60,14 +61,18 @@ Parameters
     Specifies a binary to execute after the restore process of the VIOS metadata configuration is successful.
 
 
-  forcecopy (optional, bool, False)
-    Copies the list of backup files to the respective directories in the newly installed rootvg disks.
-
-
   skipclusterstate (optional, bool, False)
     Skips the verification of the SSP cluster state, so that the installation can be triggered on multiple VIOS nodes simultaneously.
 
     You must ensure that all the SSP cluster nodes are not in ``DOWN`` state at the same time as this can bring down the SSP cluster completely.
+
+
+  wait_reboot (optional, bool, True)
+    Waits for the system to reboot and for the upgrade to complete.
+
+    Only usable when the remote user is root and the transport is ssh with public key authentication.
+
+    Copies SSH host identification and root user SSH authorized_keys file to the newly installed rootvg disks.
 
 
 
@@ -80,6 +85,7 @@ Notes
    - The level of the target mksysb image must be at version 3.1.0.00, or later.
    - Installations through this module are of the type New and Complete installation. Any customized configurations that might exist on the currently running system before the installation starts (including the timezone), are not included in the new installation image.
    - If the ``altinst_rootvg`` or ``old_rootvg`` disks are already available in the VIOS, you must rename them.
+   - This module does not require Python to be installed on the target VIOS.
 
 
 

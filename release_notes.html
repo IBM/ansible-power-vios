@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Releases &mdash; IBM Power Systems VIOS 1.0.2-beta documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   
+
   
+  
+
   
 
   
@@ -52,7 +55,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> IBM Power Systems VIOS
+            <a href="index.html" class="icon icon-home"> IBM Power Systems VIOS
           
 
           
@@ -106,6 +109,8 @@
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-2-1">Version 1.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-2-0">Version 1.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1-2">Version 1.1.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1-1">Version 1.1.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1-0">Version 1.1.0</a></li>
@@ -152,6 +157,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -163,7 +170,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             
               <a href="https://github.com/IBM/ansible-power-vios/blob/dev-collection/docs/source/release_notes.rst" class="fa fa-github"> Edit on GitHub</a>
             
@@ -181,6 +188,39 @@
             
   <div class="section" id="releases">
 <h1>Releases<a class="headerlink" href="#releases" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-2-1">
+<h2>Version 1.2.1<a class="headerlink" href="#version-1-2-1" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Notes</dt><dd><ul class="simple">
+<li><p>Minor fixes for plugin viosupgrade.py</p></li>
+</ul>
+</dd>
+<dt>Availability</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios">Automation Hub v1.2.1</a></p></li>
+<li><p><a class="reference external" href="https://galaxy.ansible.com/download/ibm-power_vios-1.2.1.tar.gz">Galaxy v1.2.1</a></p></li>
+<li><p><a class="reference external" href="https://github.com/IBM/ansible-power-vios/releases/download/v1.2.1/ibm-power_vios-1.2.1.tar.gz">GitHub v1.2.1</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="version-1-2-0">
+<h2>Version 1.2.0<a class="headerlink" href="#version-1-2-0" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Notes</dt><dd><ul class="simple">
+<li><p>mapping_facts: reports VIOS mappings (lsmap command) as Ansible facts</p></li>
+<li><p>updateios: fix automated answer to updateios command (issue #6 )</p></li>
+<li><p>viosupgrade: option for wait upon reboot</p></li>
+<li><p>viosupgrade: documenting ssh pubkey support and use of ansible tmpdir</p></li>
+</ul>
+</dd>
+<dt>Availability</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios">Automation Hub v1.2.0</a></p></li>
+<li><p><a class="reference external" href="https://galaxy.ansible.com/download/ibm-power_vios-1.2.0.tar.gz">Galaxy v1.2.0</a></p></li>
+<li><p><a class="reference external" href="https://github.com/IBM/ansible-power-vios/releases/download/v1.2.0/ibm-power_vios-1.2.0.tar.gz">GitHub v1.2.0</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
 <div class="section" id="version-1-1-2">
 <h2>Version 1.1.2<a class="headerlink" href="#version-1-1-2" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
@@ -247,27 +287,20 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="requirements.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="requirements.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, IBM
+        &#169; Copyright 2020, IBM.
 
     </p>
   </div> 
 
 </footer>
-
         </div>
       </div>
 

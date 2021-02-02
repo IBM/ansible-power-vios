@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>viosupgrade – Upgrades the Virtual I/O Server &mdash; IBM Power Systems VIOS 1.0.2-beta documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
   
+
   
+  
+
   
 
   
@@ -53,7 +56,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> IBM Power Systems VIOS
+            <a href="../index.html" class="icon icon-home"> IBM Power Systems VIOS
           
 
           
@@ -168,6 +171,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -181,7 +186,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             
               <a href="https://github.com/IBM/ansible-power-vios/blob/dev-collection/docs/source/modules/viosupgrade.rst" class="fa fa-github"> Edit on GitHub</a>
             
@@ -219,7 +224,6 @@
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>VIOS &gt;= 2.2.6.30</p></li>
-<li><p>Python &gt;= 2.7</p></li>
 </ul>
 </div>
 <div class="section" id="parameters">
@@ -234,6 +238,7 @@
 <p>The disks that are specified must not be in use.</p>
 </dd>
 <dt>filename (optional, str, None)</dt><dd><p>Specifies the file that contains the list of files that need to be backed up from the current system and saved in the new VIOS installed image. Each line must contain a single filename along with its path. Multiple files must be specified in separate new lines.</p>
+<p>The files are copied to the respective directories in the newly installed rootvg disks.</p>
 </dd>
 <dt>cluster (optional, bool, None)</dt><dd><p>Specifies that cluster-level backup and restore operations are performed. Mandatory for a VIOS that is part of an SSP cluster.</p>
 <p>If not set, cluster membership is determined automatically.</p>
@@ -242,10 +247,12 @@
 </dd>
 <dt>post_install_binary (optional, str, None)</dt><dd><p>Specifies a binary to execute after the restore process of the VIOS metadata configuration is successful.</p>
 </dd>
-<dt>forcecopy (optional, bool, False)</dt><dd><p>Copies the list of backup files to the respective directories in the newly installed rootvg disks.</p>
-</dd>
 <dt>skipclusterstate (optional, bool, False)</dt><dd><p>Skips the verification of the SSP cluster state, so that the installation can be triggered on multiple VIOS nodes simultaneously.</p>
 <p>You must ensure that all the SSP cluster nodes are not in <code class="docutils literal notranslate"><span class="pre">DOWN</span></code> state at the same time as this can bring down the SSP cluster completely.</p>
+</dd>
+<dt>wait_reboot (optional, bool, True)</dt><dd><p>Waits for the system to reboot and for the upgrade to complete.</p>
+<p>Only usable when the remote user is root and the transport is ssh with public key authentication.</p>
+<p>Copies SSH host identification and root user SSH authorized_keys file to the newly installed rootvg disks.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -258,6 +265,7 @@
 <li><p>The level of the target mksysb image must be at version 3.1.0.00, or later.</p></li>
 <li><p>Installations through this module are of the type New and Complete installation. Any customized configurations that might exist on the currently running system before the installation starts (including the timezone), are not included in the new installation image.</p></li>
 <li><p>If the <code class="docutils literal notranslate"><span class="pre">altinst_rootvg</span></code> or <code class="docutils literal notranslate"><span class="pre">old_rootvg</span></code> disks are already available in the VIOS, you must rename them.</p></li>
+<li><p>This module does not require Python to be installed on the target VIOS.</p></li>
 </ul>
 </div>
 </div>
@@ -323,29 +331,21 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../playbooks.html" class="btn btn-neutral float-right" title="Playbooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="viosecure.html" class="btn btn-neutral float-left" title="viosecure – Configures security hardening rules and firewall" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="../playbooks.html" class="btn btn-neutral float-right" title="Playbooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="viosecure.html" class="btn btn-neutral float-left" title="viosecure – Configures security hardening rules and firewall" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, IBM
+        &#169; Copyright 2020, IBM.
 
     </p>
   </div> 
 
 </footer>
-
         </div>
       </div>
 
