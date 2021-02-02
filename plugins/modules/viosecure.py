@@ -88,7 +88,7 @@ options:
                 - Specifies that the port is a remote port.
                 - All the IP activity to and from that remote port is allowed.
                 type: bool
-                default: false
+                default: no
               address:
                 description:
                 - IP address.
@@ -152,7 +152,7 @@ EXAMPLES = r'''
         rules:
         - present: yes
           port: 514
-          remote: True
+          remote: yes
           interface: "en0"
 
 - name: Load default firewall rules
@@ -353,7 +353,7 @@ def main():
                 options=dict(
                     present=dict(type='bool', default=True),
                     port=dict(required=True, type='str'),
-                    remote=dict(type='bool'),
+                    remote=dict(type='bool', default=False),
                     address=dict(type='str'),
                     timeout=dict(type='str'),
                     interface=dict(type='str'),
