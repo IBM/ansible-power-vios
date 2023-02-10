@@ -1,0 +1,15 @@
+---
+- name: "Bootstrap DNF on VIOS"
+  hosts: "{{hostname_vios}}"
+  gather_facts: no
+  tasks:
+
+# CHECK for Yum on inventory host
+  - import_role:
+      name: power_vios_bootstrap
+    vars:
+      pkgtype: "dnf"
+      ansible_user: root
+      download_dir: "~"
+      target_dir: "/tmp/.ansible.cpdir"
+

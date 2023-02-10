@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: power_vios_bootstrap
+  author: Nitish Mishra
+  description: Ansible role for bootstrapping IBM Power Systems VIOS servers with DNF package managers.
+  company: IBM
+
+  license: GPL-3.0-only
+
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: VIOS
+      versions:
+        - all
+
+  galaxy_tags: [vios]
+  dependencies: []
