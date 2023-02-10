@@ -5,24 +5,24 @@
 Releases
 ========
 
-Version 1.2.1
+Version 1.2.2
 -------------
 Notes
-  * Minor fixes for plugin viosupgrade.py
+  * Fix broken dnf bootstrap playbook and include dnf bootstrap role
 
 Availability
-  * `Automation Hub v1.2.1`_
-  * `Galaxy v1.2.1`_
-  * `GitHub v1.2.1`_
+  * `Automation Hub v1.2.2`_
+  * `Galaxy v1.2.2`_
+  * `GitHub v1.2.2`_
 
-.. _Automation Hub v1.2.1:
+.. _Automation Hub v1.2.2:
    https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios
 
-.. _Galaxy v1.2.1:
-   https://galaxy.ansible.com/download/ibm-power_vios-1.2.1.tar.gz
+.. _Galaxy v1.2.2:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.2.2.tar.gz
 
-.. _GitHub v1.2.1:
-   https://github.com/IBM/ansible-power-vios/releases/download/v1.2.1/ibm-power_vios-1.2.1.tar.gz
+.. _GitHub v1.2.2:
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.2.2/ibm-power_vios-1.2.2.tar.gz
 
 Version 1.2.0
 --------------
@@ -117,4 +117,20 @@ Availability
 
 .. _GitHub v1.0.2-beta:
    https://github.com/IBM/ansible-power-vios/releases/download/v1.0.2/ibm-power_vios-1.0.2-beta.tar.gz
+
+Version 1.2.2
+-------------
+Notes
+  * Fix broken bootstrap playbook, include new role for dnf bootstrap playbook
+  * which installs and updates dnf and python3 along with other dependencies
+
+Availability
+  * `Galaxy v1.2.2
+  * `GitHub v1.2.2
+
+.. _Galaxy v1.2.2:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.2.2.tar.gz
+
+.. _GitHub v1.2.2
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.2.2/ibm-power_vios-1.2.2.tar.gz
 

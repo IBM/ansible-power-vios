@@ -7,7 +7,7 @@ namespace: ibm
 name: power_vios
 
 # The version of the collection.
-version: 1.2.1
+version: 1.2.2
 
 # Collection README file (relative to root path)
 readme: README.md
@@ -16,6 +16,7 @@ readme: README.md
 # @nicks:irc/im.site#channel'
 authors:
 - Paul B. Finley (@pbfinley1911)
+- Nitish K Mishra (@nitismis)
 
 # Collection Description
 description: Ansible Content for IBM Power Systems - VIOS provides a collection of content used to manage and deploy Power Systems VIOS.

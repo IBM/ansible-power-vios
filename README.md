@@ -1,3 +1,4 @@
+
 <!-- This should be the location of the title of the repository, normally the short name -->
 # IBM Power Systems VIOS Collection
 
@@ -100,9 +101,12 @@ Authors:
 - Nitish Mishra <nitismis@in.ibm.com>
 - Patrice Jacquin <pjacquin@us.ibm.com>
 - Pascal Oliva <poliva@us.ibm.com>
+- Shreyansh Chamola <shreyansh.chamola@ibm.com>
+
 
 [coc]: https://help.github.com/en/github/building-a-strong-community/adding-a-code-of-conduct-to-your-project
 [issues]: https://github.com/IBM/ansible-power-vios/issues/new
 [YUM]: https://developer.ibm.com/articles/configure-yum-on-aix/
 [pages]: https://ibm.github.io/ansible-power-vios/
 [Installing Ansible]: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+
