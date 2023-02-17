@@ -95,6 +95,7 @@ import re
 
 from ansible.module_utils.basic import AnsibleModule
 
+results = None
 
 ioscli_cmd = '/usr/ios/cli/ioscli'
 
@@ -103,7 +104,6 @@ def get_ioslevel(module):
     """
     Return the latest installed maintenance level of the system.
     """
-    global results
 
     cmd = [ioscli_cmd, 'ioslevel']
     ret, stdout, stderr = module.run_command(cmd)

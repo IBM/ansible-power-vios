@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/sh
 # This scripts downloads the rpm.rte & dnf_bundle.tar
 # rpm.rte-4.13.0.x which is a prequisite for dnf.
 # dnf_bundle.tar contains dnf and its dependent packages.
@@ -23,11 +23,11 @@ then
 fi
 
 # First check the AIX version.
-oslvl=`/usr/bin/oslevel`
+oslvl=$(/usr/bin/oslevel)
 aix_ver=$(/usr/bin/lslpp -qLc bos.rte | /usr/bin/awk -F':' '{print $3}')
-af1=$(echo $aix_ver | /usr/bin/cut -d"." -f1)
-af2=$(echo $aix_ver | /usr/bin/cut -d"." -f2)
-af3=$(echo $aix_ver | /usr/bin/cut -d"." -f3)
+af1=$(echo "$aix_ver" | /usr/bin/cut -d"." -f1)
+af2=$(echo "$aix_ver" | /usr/bin/cut -d"." -f2)
+af3=$(echo "$aix_ver" | /usr/bin/cut -d"." -f3)
 if [[ "$oslvl" = "7.1.0.0" ]]
 then
     if [[ ( ! $af1 -ge 7 ) || ( ! $af2 -ge 1 ) || ( ! $af3 -ge 3 ) ]]
@@ -51,7 +51,6 @@ then
     yum3_instd=1
 fi
 
-prog=${0##*/}
 yum4=0
 
 if [ "$arg" == "-y" ]
@@ -69,10 +68,10 @@ function print_openssl_err {
     exit 1
 }
 ssl_ver=$(lslpp -Lc openssl.base | /usr/bin/awk 'FNR==2' | /usr/bin/awk -F':' '{print $3}')
-f1=$(echo $ssl_ver | /usr/bin/cut -d"." -f1)
-f2=$(echo $ssl_ver | /usr/bin/cut -d"." -f2)
-f3=$(echo $ssl_ver | /usr/bin/cut -d"." -f3)
-f4=$(echo $ssl_ver | /usr/bin/cut -d"." -f4)
+f1=$(echo "$ssl_ver" | /usr/bin/cut -d"." -f1)
+f2=$(echo "$ssl_ver" | /usr/bin/cut -d"." -f2)
+f3=$(echo "$ssl_ver" | /usr/bin/cut -d"." -f3)
+f4=$(echo "$ssl_ver" | /usr/bin/cut -d"." -f4)
 if [[ ( ! $f1 -ge 1 ) || ( ! $f2 -ge 0 ) || ( ! $f3 -ge 0) ]]
 then
      print_openssl_err
@@ -89,12 +88,12 @@ else
     fi
 fi
 
-oslvl=`/usr/bin/oslevel`
+oslvl=$(/usr/bin/oslevel)
 aix_730_plus=0
-os_f1=$(echo $oslvl | /usr/bin/cut -d"." -f1)
-os_f2=$(echo $oslvl | /usr/bin/cut -d"." -f2)
-os_f3=$(echo $oslvl | /usr/bin/cut -d"." -f3)
-os_f4=$(echo $oslvl | /usr/bin/cut -d"." -f4)
+os_f1=$(echo "$oslvl" | /usr/bin/cut -d"." -f1)
+os_f2=$(echo "$oslvl" | /usr/bin/cut -d"." -f2)
+os_f3=$(echo "$oslvl" | /usr/bin/cut -d"." -f3)
+os_f4=$(echo "$oslvl" | /usr/bin/cut -d"." -f4)
 if [[ ( $os_f1 -ge 7 ) && ( $os_f2 -ge 3 ) && ( $os_f3 -ge 0 ) && ( $os_f4 -ge 0 ) ]]
 then
     aix_730_plus=1
@@ -108,9 +107,9 @@ fi
 
 if [[ $aix_730_plus -eq 1 ]]
 then
-    typeset -i total_req=`echo "(270)" | bc`
+    typeset -i total_req=$(echo "(270)" | bc)
     echo "this is the tmppath: $tmppath"
-    tmp_free=`/usr/bin/df -m "$tmppath" | sed -e /Filesystem/d | awk '{print $3}' | bc`
+    tmp_free=$(/usr/bin/df -m "$tmppath" | sed -e /Filesystem/d | awk '{print $3}' | bc)
     if [[ $tmp_free -le $total_req ]]
     then
       chfs -a size=+$(( total_req - tmp_free ))M "$tmppath"
@@ -122,8 +121,8 @@ then
       fi
     fi
 else
-    typeset -i total_req=`echo "(340)" | bc`
-    tmp_free=`/usr/bin/df -m "$tmppath" | sed -e /Filesystem/d | awk '{print $3}'`
+    typeset -i total_req=$(echo "(340)" | bc)
+    tmp_free=$(/usr/bin/df -m "$tmppath" | sed -e /Filesystem/d | awk '{print $3}')
     if [[ $tmp_free -le $total_req ]]
     then
       chfs -a size=+$(( total_req - tmp_free ))M "$tmppath"
@@ -138,8 +137,8 @@ fi
 
 # Check if /opt is having enough space to install the packages from dnf_bundle.
 # Currently we need around 457MB of free space in /opt filesystem.
-typeset -i total_opt=`echo "(512)" | bc`
-opt_free=`/usr/bin/df -m /opt | sed -e /Filesystem/d | head -1 | awk '{print $3}'`
+typeset -i total_opt=$(echo "(512)" | bc)
+opt_free=$(/usr/bin/df -m /opt | sed -e /Filesystem/d | head -1 | awk '{print $3}')
 if [[ $opt_free -le $total_opt ]]
 then
     chfs -a size=+$(( total_opt - opt_free ))M /opt
@@ -156,21 +155,19 @@ cd $tmppath
 
 if [[ $aix_730_plus -eq 1 ]]
 then
-    echo "\nExtracting dnf_bundle_aix_73.tar ..."
+    printf "\nExtracting dnf_bundle_aix_73.tar ..."
     tar -xvf dnf_bundle_aix_73.tar
 else
-    echo "\nExtracting dnf_bundle_aix_71_72.tar ..."
+    printf "\nExtracting dnf_bundle_aix_71_72.tar ..."
     tar -xvf dnf_bundle_aix_71_72.tar
 fi
-
 
 ./install_dnf.sh "$arg" $yum4 $yum3_instd 2
 if [[ $? -eq 0 ]]
 then
     cd - >/dev/null 2>&1
     exit 0
-elif [[ $? -ne 0 ]]
-then
+else
     echo "You can try installing the downloaded dnf packages from $tmppath manually."
     exit 1
 fi

@@ -184,12 +184,12 @@ firewall:
 
 from ansible.module_utils.basic import AnsibleModule
 
+results = None
 
 ioscli_cmd = '/usr/ios/cli/ioscli'
 
 
 def security_apply(module, params):
-    global results
 
     cmd = [ioscli_cmd, 'viosecure']
     if params['level']:
@@ -227,7 +227,6 @@ def firewall_view(module):
     all,21,any,ftp,0.0.0.0,0
     all,20,any,ftp-data,0.0.0.0,0
     """
-    global results
 
     # Do not use ':' as seperator because it causes problems with IPv6 addresses
     sep = ','
@@ -277,7 +276,6 @@ def firewall_apply(module, params):
     """
     Apply the specified firewall settings.
     """
-    global results
 
     firewall = params['firewall']
 

@@ -199,6 +199,7 @@ import re
 
 from ansible.module_utils.basic import AnsibleModule
 
+results = None
 
 ioscli_cmd = '/usr/ios/cli/ioscli'
 
@@ -207,7 +208,6 @@ def get_ioslevel(module):
     """
     Return the latest installed maintenance level of the system.
     """
-    global results
 
     cmd = [ioscli_cmd, 'ioslevel']
     ret, stdout, stderr = module.run_command(cmd)
@@ -232,7 +232,6 @@ def viosbr_backup(module, params):
     """
     Takes the backup of VIOS configurations.
     """
-    global results
 
     filename = params['file']
 
@@ -261,7 +260,6 @@ def viosbr_restore(module, params):
     Takes backup file as input and brings the VIOS partition to the same
     state when the backup was taken.
     """
-    global results
 
     cmd = [ioscli_cmd, 'viosbr', '-restore']
     cmd += ['-file', params['file']]
@@ -299,7 +297,6 @@ def viosbr_recoverdb(module, params):
     Recovers from the shared storage pool database corruption,
     either from the backup file or from the solid database backup.
     """
-    global results
 
     cmd = [ioscli_cmd, 'viosbr', '-recoverdb']
     cmd += ['-clustername', params['clustername']]
@@ -320,7 +317,6 @@ def viosbr_migrate(module, params):
     """
     Migrates earlier cluster version of backup file to the current version.
     """
-    global results
 
     cmd = [ioscli_cmd, 'viosbr', '-migrate']
     cmd += ['-file', params['file']]
@@ -339,7 +335,6 @@ def viosbr_dr(module, params):
     """
     Recovers the cluster on another geographic location.
     """
-    global results
 
     results['msg'] = 'Disaster recovery is currently not implemented'
     module.fail_json(**results)
@@ -350,7 +345,6 @@ def viosbr_list(module, params):
     Displays backup files from either the default location /home/padmin/cfgbackups or
     a user-specified location.
     """
-    global results
 
     cmd = [ioscli_cmd, 'viosbr', '-view', '-list']
     # Directory defaults to /home/padmin/cfgbackups
