@@ -2,6 +2,8 @@
 - name: "Bootstrap DNF on VIOS"
   hosts: "{{hostname_vios}}"
   gather_facts: no
+  collections:
+  - ibm.power_vios
   tasks:
 
 # CHECK for Yum on inventory host
@@ -12,4 +14,3 @@
       ansible_user: root
       download_dir: "~"
       target_dir: "/tmp/.ansible.cpdir"
-

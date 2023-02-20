@@ -36,4 +36,3 @@
 - name: Bootstrap dnf
   include_tasks: "dnf_install.yml"
   when: pkgtype == "dnf"
-
