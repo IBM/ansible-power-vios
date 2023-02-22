@@ -5,6 +5,25 @@
 Releases
 ========
 
+Version 1.2.3
+-------------
+Notes
+  * Fix pylint issue and import error
+
+Availability
+  * `Automation Hub v1.2.2`_
+  * `Galaxy v1.2.2`_
+  * `GitHub v1.2.2`_
+
+.. _Automation Hub v1.2.2:
+   https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios
+
+.. _Galaxy v1.2.2:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.2.2.tar.gz
+
+.. _GitHub v1.2.2:
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.2.2/ibm-power_vios-1.2.2.tar.gz
+
 Version 1.2.2
 -------------
 Notes
