@@ -35,14 +35,11 @@ help:
 	@echo "install-ansible-devel-branch			install ansible development branch"
 	@echo "install-sanity-test-requirements		install python modules needed to \
 	run sanity testing"
-	@echo "install-unit-test-requirements 			install python modules needed \
-	run unit testing"
 	@echo "lint 						lint ansible module and roles"         
 	@echo "module-lint MODULE=<module path> 		lint ansible module"         
 	@echo "role-lint ROLE=<role path> 			lint ansible role"         
 	@echo "porting MODULE=<module path>			check if module is python3 ported"
 	@echo "sanity-test MODULE=<module path>		run sanity test on the collections"
-	@echo "unit-test TEST=<test path>			run unit test suite for the collection"
 	@echo "clean						clean junk files"
 
 .PHONY: clean
@@ -98,7 +95,7 @@ lint: module-lint role-lint
 .PHONY: module-lint
 module-lint:
 	ansible-test sanity -v --color yes --truncate 0 --python $(PYTHON_VERSION) \
- 	--exclude $(DEPRECATED) --test pylint $(MODULE)
+ 	--test pylint $(MODULE)
 	flake8 --ignore=E402,W503 --max-line-length=160 --exclude $(DEPRECATED) $(MODULE)
 	python -m pycodestyle --ignore=E402,W503 --max-line-length=160 --exclude $(DEPRECATED) \
 		$(MODULE)

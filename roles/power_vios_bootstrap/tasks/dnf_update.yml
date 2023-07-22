@@ -12,11 +12,12 @@
           - {filesystem: "opt", size_needed: "900"}
 
 # Update dnf
-- name: Update dnf and other installed packages in the system 
+- name: Update dnf and other installed packages in the system
   raw: "yes yes | /opt/freeware/bin/dnf update"
   register: dnf_update_result
 
 - name: Print status
   debug:
-    msg: JOB DONE !! Bootstrap attempt of dnf on {{ vios_host }} has completed
+          msg: JOB DONE !! Bootstrap attempt of dnf on {{ vios_host }} has completed
   when: dnf_update_result.rc == 0
+

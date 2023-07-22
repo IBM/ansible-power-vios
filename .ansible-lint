@@ -9,3 +9,4 @@
 skip_list:
   - unnamed-task
   - package-latest
+  - no-changed-when
