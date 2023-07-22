@@ -20,4 +20,3 @@
   debug:
           msg: JOB DONE !! Bootstrap attempt of dnf on {{ vios_host }} has completed
   when: dnf_update_result.rc == 0
-

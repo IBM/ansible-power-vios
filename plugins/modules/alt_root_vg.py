@@ -138,7 +138,7 @@ def get_free_pvs(module):
 
     return: dictionary with free PVs information
     """
-    
+
     cmd = [ioscli_cmd, 'lspv', '-free']
     ret, stdout, stderr = module.run_command(cmd)
     if ret != 0:
@@ -322,7 +322,7 @@ def check_rootvg(module):
             "rootvg_size": size in Megabytes (int)
             "used_size": size in Megabytes (int)
     """
-    
+
     vg_info = {}
     vg_info["status"] = 1
     vg_info["rootvg_size"] = 0
@@ -382,7 +382,7 @@ def alt_disk_copy(module, hdisks, disk_size_policy, force):
     - check the rootvg, find and validate the hdisks for the operation
     - perform the alt disk copy operation
     """
-    
+
     # Either hdisks must be non-empty or disk_size_policy must be
     # explicitly set. This ensures the user knows what he is doing.
     if not hdisks and not disk_size_policy:
@@ -420,7 +420,7 @@ def alt_disk_clean(module, hdisks):
     - cleanup alternate disk volume group (alt_rootvg_op -X)
     - clear the owning volume manager from each disk (chpv -C)
     """
-    
+
     pvs = get_pvs(module)
     if pvs is None:
         module.fail_json(**results)

@@ -1,0 +1,1 @@
+plugins/modules/alt_root_vg.py pylint:consider-using-f-string
