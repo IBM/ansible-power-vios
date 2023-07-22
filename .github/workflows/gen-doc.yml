@@ -1,0 +1,50 @@
+---
+name: generate ibm.power_vios collection documentation source files
+
+# run sanity test during pull request to dev-collection
+on:
+  release:
+    types: [published]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  ########################################################################
+  # generate doc files
+  ########################################################################
+  gen-doc:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8']
+        ansible-version: ['2.9']
+
+    name: generate documenation source files
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v2
+      
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: install document generation requirements
+      run: |
+        make install-ansible ANSIBLE_VERSION=${{ matrix.ansible-version }}
+        python -m pip install ansible-doc-extractor
+        python -m pip install sphinx
+        python -m pip install sphinx_rtd_theme
+        python -m pip install --upgrade myst-parser
+        
+    - name: run document generator script
+      run: |
+        bash devops/bin/gen_doc.sh
+
+    - name: publish documentation to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: docs/build
+        branch: gh-pages
