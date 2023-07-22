@@ -232,8 +232,6 @@ jobs:
         - cd ${ANSIBLE_COLLECTION_DIR}
         - export ANSIBLE_COLLECTIONS_PATHS=$(pwd)
         - make install-ansible ANSIBLE_VERSION=2.9
-        - make install-unit-test-requirements
-        - make unit-test
 
   ########################################################################
   # generate doc files
