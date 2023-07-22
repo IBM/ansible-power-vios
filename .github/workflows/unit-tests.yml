@@ -36,10 +36,6 @@ jobs:
       run: |
         make install-ansible ANSIBLE_VERSION=2.9
         
-    - name: install python modules needed for unit testing
-      run: |
-        make install-unit-test-requirements
-        
     - name: run unit tests
       run: |
         make unit-test PYTHON_VERSION=${{ matrix.python-version }}
