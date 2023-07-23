@@ -20,7 +20,6 @@ jobs:
   #   - name: "compile-test"
   #   - name: "module-linting-test"
   #   - name: "role-linting-test"
-  #   - name: "unit-test"
   #   - name: "gen-doc-files"
 
   include:
@@ -218,20 +217,6 @@ jobs:
         - make install-ansible ANSIBLE_VERSION=${ANSIBLE_VERSION}
         - make install-sanity-test-requirements
         - make role-lint
-
-  ########################################################################
-  # unit test
-  # - run unit tests for the modules
-  ########################################################################
-    - name: "unit-test"
-      env: 
-        - NAME="unit-test"
-        - ANSIBLE_COLLECTION_DIR=ansible_collections/ibm/power_vios/
-      script:
-        - git clone --branch ${TRAVIS_BRANCH} git@github.ibm.com:ansible-power-vios/development.git ${ANSIBLE_COLLECTION_DIR}
-        - cd ${ANSIBLE_COLLECTION_DIR}
-        - export ANSIBLE_COLLECTIONS_PATHS=$(pwd)
-        - make install-ansible ANSIBLE_VERSION=2.9
 
   ########################################################################
   # generate doc files
