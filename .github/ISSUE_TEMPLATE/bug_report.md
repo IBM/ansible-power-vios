@@ -27,6 +27,8 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. VIOS 2.2.6.30]
  - Python Version [e.g. 2.7.5, 3.6]
  - OpenSSH Version [e.g. 1.0.2]
+ - Ansible Version [e.g. 2.10.7]:
+ - VIOS Collection Version [e.g. 1.2.3]:
 
 **Additional context**
 Add any other context about the problem here.
