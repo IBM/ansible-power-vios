@@ -34,8 +34,10 @@ options:
     - C(remove) to remove the specified file sets from the system.
     - C(list) to list the file sets on the VIOS installation media that are
       available to be installed.
+    - C(remove_outdated_filesets) to remove all outdated filesets from the
+      system.
     type: str
-    choices: [ update, commit, cleanup, install, remove, list ]
+    choices: [ update, commit, cleanup, install, remove, list, remove_outdated_filesets ]
     required: true
   device:
     description:
@@ -170,7 +172,7 @@ def main():
         supports_check_mode=True,
         argument_spec=dict(
             action=dict(required=True, type='str',
-                        choices=['update', 'commit', 'cleanup', 'install', 'remove', 'list']),
+                        choices=['update', 'commit', 'cleanup', 'install', 'remove', 'list', 'remove_outdated_filesets']),
             device=dict(type='str'),
             accept_licenses=dict(type='bool', default=False),
             force=dict(type='bool', default=False),
@@ -220,6 +222,8 @@ def main():
         cmd += ['-cleanup']
     elif action == 'list':
         cmd += ['-list', '-dev', params['device']]
+    elif action == 'remove_outdated_filesets':
+        cmd += ['-remove_outdated_filesets']
 
     # Note: updateios is an interactive command.
     # We use the same mechanism nim uses (c_updateios.sh) to implement preview mode.
