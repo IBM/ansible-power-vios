@@ -36,8 +36,9 @@ options:
       the given file name.
     - C(dr) to recover the cluster on another geographic location.
     - C(list) to view the listing of backup files.
+    - C(view) to view a backup file
     type: str
-    choices: [ backup, restore, recoverdb, migrate, dr, list ]
+    choices: [ backup, restore, recoverdb, migrate, dr, list, view ]
     required: true
   file:
     description:
@@ -46,6 +47,15 @@ options:
     - For cluster backups, compressed file is created with C(<clustername>.tar.gz) extension.
     - If file name is a relative path, file is created under C(/home/padmin/cfgbackups).
     type: str
+  view_backup_file:
+    description:
+    - Specifies the file name of the file which user wants to view information about.
+    type: str
+  mapping:
+    description:
+    - Displays mapping information for SEA, virtual SCSI adapters, VFC adapters, and PowerVM Active Memory Sharing paging devices.
+    type: bool
+    default: no
   dir:
     description:
     - User-specified location from where to list backup files when I(action=list).
@@ -165,6 +175,11 @@ EXAMPLES = r'''
     action: dr
     clustername: mycluster
     file: systemA.mycluster.tar.gz
+
+- name: View information about a backup file
+  viosbr:
+    action: view
+    view_backup_file: systemA.backup.tar.gz
 '''
 
 RETURN = r'''
@@ -358,6 +373,25 @@ def viosbr_list(module, params):
         results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(' '.join(cmd), ret)
         module.fail_json(**results)
 
+def viosbr_view(module, params):
+    """
+    Displays information for a user-specified backup file
+    """
+
+    cmd = [ioscli_cmd, 'viosbr', '-view', '-file', params['view_backup_file']]
+
+    if params['devtype']:
+        cmd += ['-type', params['devtype']]
+    if params['mapping']:
+        cmd += ['-mapping']
+
+    ret, stdout, stderr = module.run_command(cmd)
+    results['stdout'] = stdout
+    results['stderr'] = stderr
+    if ret != 0:
+        results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(' '.join(cmd), ret)
+        module.fail_json(**results)
+
 
 def main():
     global results
@@ -365,8 +399,10 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             action=dict(required=True, type='str',
-                        choices=['backup', 'restore', 'recoverdb', 'migrate', 'dr', 'list']),
+                        choices=['backup', 'restore', 'recoverdb', 'migrate', 'dr', 'list', 'view']),
             file=dict(type='str'),
+            view_backup_file=dict(type='str'),
+            mapping=dict(type='bool', default=False),
             dir=dict(type='str'),
             devtype=dict(type='str',
                          choices=['net', 'vscsi', 'npiv', 'cluster', 'vlogrepo', 'ams']),
@@ -384,6 +420,7 @@ def main():
             ['action', 'restore', ['file']],
             ['action', 'recoverdb', ['clustername']],
             ['action', 'migrate', ['file']],
+            ['action', 'view', ['view_backup_file']],
         ],
         mutually_exclusive=[
             ['force', 'validate']
@@ -413,6 +450,8 @@ def main():
         viosbr_dr(module, module.params)
     elif action == 'list':
         viosbr_list(module, module.params)
+    elif action == 'view':
+        viosbr_view(module, module.params)
 
     results['msg'] = 'viosbr completed successfully'
     module.exit_json(**results)
