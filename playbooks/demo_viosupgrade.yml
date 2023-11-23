@@ -1,0 +1,27 @@
+---
+- name: "Demo VIOS upgrade"
+  hosts: "{{ hosts_val }}"
+  gather_facts: no
+  vars:
+    hosts_val: all
+    dir: "/home/padmin/update"
+    image_file: "/home/padmin/mymksysbA"
+    disks: ['hdisk1', 'hdisk2']
+    filename: "/home/padmin/file_list_name"
+  tasks:
+    - name: Perform the VIOS upgrade operation on new rootvg disks hdisk1 and hdisk2
+      viosupgrade:
+        image_file: "{{ image_file }}"
+        mksysb_install_disks: "{{ disks }}"
+
+    - name: Upgrade the VIOS that belongs to an SSP cluster
+      viosupgrade:
+        image_file: "{{ image_file }}"
+        mksysb_install_disks: "{{ disks }}"
+        cluster: yes
+
+    - name: Copy files from the current rootvg disk to a newly installed VIOS image
+      viosupgrade:
+        image_file: "{{ image_file }}"
+        mksysb_install_disks: "{{ disks }}"
+        filename: "{{ filename }}"
