@@ -1,0 +1,21 @@
+---
+- name: "Demo for end to end updation: download and update"
+  hosts: "{{ hosts_val }}"
+  gather_facts: no
+  vars:
+    hosts_val: all
+    dir: "/home/padmin/update/VIOS_FP_3.1.4.10"
+    fix_id_val: "VIOS_FP_3.1.4.10"
+    device_val: "/home/padmin/update/VIOS_FP_3.1.4.10"
+  tasks:
+  
+  - name: Download a fix/file
+    fix_download:
+      action: "download"
+      fix_id: "{{ fix_id_val }}"
+      directory: "{{ dir }}"
+      clean_directory: True
+  - name: Update the VIOS to the latest level, where the updates are present at a particular location.
+    updateios:
+      action: update
+      device: "{{ device_val }}"
