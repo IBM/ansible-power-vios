@@ -1,0 +1,42 @@
+---
+- name: "Demo viosbr"
+  hosts: "{{ hosts_val }}"
+  gather_facts: no
+  vars:
+    hosts_val: all
+    file_val: "/ansible_cluster_viosbr.ansible_cluster.tar.gz"
+    cluster_val: "ansible_cluster"
+    devtype_val: "vscsi"
+  tasks:
+  - name: Operation autobakcup
+    viosbr:
+      action: autobackup
+
+  - name: Operation viosbr backup
+    viosbr:
+      action: backup
+      file: sam_test
+
+  - name: Operation migrate
+    viosbr:
+      action: migrate
+      file:  "{{ file_val }}"
+  
+  - name: Operation recoverdb restore
+    viosbr:
+      action: recoverdb
+      file:  "{{ file_val }}"
+      clustername: "{{ cluster_val }}"
+
+  - name: Operation viosbr devtype restore
+    viosbr:
+      action: restore
+      file:  sam_test.tar.gz
+      devtype: "{{ devtype_val }}"
+
+  - name: Operation viosbr devtype restore
+    viosbr:
+      action: restore
+      file:  ansible_clutser_backup.ansible_cluster.tar.gz
+      devtype: "{{ devtype_val }}"
+      clustername: "{{ cluster_val }}"
