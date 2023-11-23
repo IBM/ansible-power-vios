@@ -254,6 +254,7 @@ def check_space(module, required_space):
         True - If space is enough.
         False - If space is not enough.
     '''
+
     cmd = "df -m "
     cmd += module.params['directory']
 
@@ -409,6 +410,7 @@ def get_info(module):
         module.fail_json()
 
     # asset will be something like this: XXXX-YYY
+
     asset = stdout.split(",")[1].strip()
 
     cmd_for_assetid = "uname -m"
@@ -424,7 +426,8 @@ def get_info(module):
         results['msg'] = "The following command failed: " + cmd_for_assetid
         module.fail_json()
 
-    # asset_id will be something like this: 00FB29XXXXXX
+    # asset_id will be something like this: XXXXXXXXXXXX
+
     asset_id = stdout.strip()
 
 
@@ -746,7 +749,7 @@ def generate_event_id():
     event_id += "_" + asset_id
     event_id += "_" + str(event_time_ms)
 
-    # event_id will be something like: IBM_VIOS_9040-MR9_00FB29314C00_1687344006365
+    # event_id will be something like: IBM_VIOS_XXXX-XXX_XXXXXXXXXXXX_1687344006365
 
 
 def generate_event_header(payload_type):
@@ -953,7 +956,7 @@ def generate_event(module, payload_type):
     "events": [
     {
       "header": {
-        "event_id": "software_update_IBM_AIX_8231-E2D_0686B6R_1687344006365",
+        "event_id": "software_update_IBM_AIX_XXXX-XXX_XXXXXXX_1687344006365",
         "event_time": "2023-06-21 05:40:06",
         "event_time_ms": 1687344006365,
         "event_type": "software_update"
@@ -962,15 +965,15 @@ def generate_event(module, payload_type):
         "operation": "order_software",
         "action": "order_aix_software",
         "component": "system",
-        "expand_groups": false,
+        "expand_groups": true,
         "request_type": "preview_all_fixes",
         "efd_product": "ibm\aix",
         "product_level": "7200-02",
         "credentials": {
           "mtsn": [
             {
-              "machine_type": "8231",
-              "serial_number": "0686B6R",
+              "machine_type": "XXXX",
+              "serial_number": "XXXXXXX",
               "country": "US"
             }
           ]
@@ -1023,8 +1026,8 @@ def generate_payload(module, payload_type):
    "api_key":"iwkiwis8s9292sksk432156",
    "private_key":"39e93i93i9ei39abcde",
    "target_space":"prod",
-   "asset":"9040-MR9",
-   "asset_id":"00FB29314C00",
+   "asset":"XXXX-YYY",
+   "asset_id":"XXXXXXXXXXXX",
    "asset_virtual_id":"00000000",
    "asset_type":"Power",
    "asset_vendor":"IBM",
@@ -1037,12 +1040,12 @@ def generate_payload(module, payload_type):
       "name":"IBM_VIOS_Version",
       "vrmf":"3.1.4.0"
    },
-   "event_id":"IBM_VIOS_9040-MR9_00FB29314C00_1687344006365",
+   "event_id":"IBM_VIOS_XXXX-XXX_XXXXXXXXXXXX_1687344006365",
    "events":[
       {
          "header":{
             "event_type":"software_update",
-            "event_id":"software_update_IBM_VIOS_9040-MR9_00FB29314C00_1687344006365",
+            "event_id":"software_update_IBM_VIOS_XXXX-XXX_XXXXXXXXXXXX_1687344006365",
             "event_time":"2023-06-21 05:40:06",
             "event_type":"software_update"
          },
@@ -1056,8 +1059,8 @@ def generate_payload(module, payload_type):
             "credentials":{
                "mtsn":[
                   {
-                     "machine_type":"9040",
-                     "serial_number":"00FB29314C00",
+                     "machine_type":"XXXX",
+                     "serial_number":"XXXXXXXXXXXX",
                      "country":"US"
                   }
                ]
@@ -1092,7 +1095,8 @@ def generate_payload(module, payload_type):
     software_level_info["vrmf"] = oslevel
     payload["software_level"] = software_level_info
 
-    # Value of event_id = will be something like this: IBM_VIOS_9040-MR9_00FB29314C00_1687344006365
+    # Value of event_id = will be something like this: IBM_VIOS_XXXX-XXX_XXXXXXXXXXXX_1687344006365
+
     generate_event_id()
 
     payload["event_id"] = event_id
