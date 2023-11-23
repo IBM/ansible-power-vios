@@ -1,0 +1,54 @@
+---
+- name: "Demo Updateios"
+  hosts: "{{ hosts_val }}"
+  gather_facts: no
+  vars:
+    hosts_val: all
+    device_val: /home/padmin/update
+  tasks:
+  - name: List the available file sets on the VIOS installation media
+    updateios:
+      action: list
+      device: "{{ device_val }}"
+
+  - name: Cleanup partially installed updates
+    updateios:
+      action: cleanup
+
+  - name: Remove a particular fileset
+    updateios:
+      action: remove
+      filesets: [ios.cli.man.es_ES, ios.cli.man.fr_FR]
+
+  - name: Update the VIOS to the latest level, where the updates are
+        present at a particular location
+    updateios:
+      action: update
+      device: "{{ device_val }}"
+
+  - name: Update the VIOS to the latest level, when previous levels are not committed
+    updateios:
+      action: update
+      force: yes
+      device: "{{ device_val }}"
+
+  - name: Commit the installed updates
+    updateios:
+      action: commit
+
+  - name: Install a file set from the VIOS installation media
+    updateios:
+      action: install
+      filesets: ILMT-TAD4D-agent
+      device: /dev/cd1
+
+  - name: Install an ifix copied in VIOS home directory
+    updateios:
+      action: update
+      device: "{{ device_val }}"
+      install_new: yes
+      accept_licenses: yes
+
+  - name: Remove outdated filesets
+    updateios:
+      action: remove_outdated_filesets
