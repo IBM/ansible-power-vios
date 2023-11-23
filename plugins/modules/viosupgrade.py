@@ -111,6 +111,8 @@ options:
     default: yes
 notes:
   - The level of the target mksysb image must be at version 3.1.0.00, or later.
+  - If an iso image is used instead of mksysb image first convert the iso image into
+    mksysb image using viosupgrade -I <ISO_IMAGE> -W <PATH_TO_CREATE_MKSYSB_IMAGE>.
   - Installations through this module are of the type New and Complete installation.
     Any customized configurations that might exist on the currently running system
     before the installation starts (including the timezone), are not included in the
