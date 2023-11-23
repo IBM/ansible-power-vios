@@ -1,0 +1,22 @@
+---
+- name: "Demo Fix Downloads"
+  hosts: "{{ hosts_val }}"
+  gather_facts: no
+  vars:
+    hosts_val: all
+    dir: "/home/padmin/update"
+    fix_id_val: "VIOS_FP_3.1.4.21"
+  tasks:
+
+  - name: List fixes for the system
+    fix_download:
+      action: "list"
+    register: result
+  - debug: var=result.List_of_Fixes
+  
+  - name: Download a fix/file
+    fix_download:
+      action: "download"
+      fix_id: "{{ fix_id_val }}"
+      directory: "{{ dir }}"
+      clean_directory: True
