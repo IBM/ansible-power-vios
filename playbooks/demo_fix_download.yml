@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     hosts_val: all
-    dir: "/home/padmin/update/bffupdate"
+    dir: "/home/padmin/update"
     fix_id_val: "VIOS_FP_3.1.4.21"
   tasks:
 
