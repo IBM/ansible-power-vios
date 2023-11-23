@@ -64,12 +64,40 @@ options:
     - Specifies a binary to execute after the restore process of the VIOS metadata
       configuration is successful.
     type: str
+  pre_restore_script:
+    description:
+    - Specifies the script name that runs before the system configuration is restored.
+    - You cannot use this with the I(skiprestore) as true.
+    - If a nonzero value is returned from the pre_restore_script, the upgrade operation
+    - exits with a failure message. You must resolve the issue and rerun the operation by
+    - using -o rerun option.
+    type: bool
+    default: no
   skipclusterstate:
     description:
     - Skips the verification of the SSP cluster state, so that the installation
       can be triggered on multiple VIOS nodes simultaneously.
     - You must ensure that all the SSP cluster nodes are not in C(DOWN) state at
       the same time as this can bring down the SSP cluster completely.
+    type: bool
+    default: no
+  preserve_devname:
+    description:
+    - Allows you to preserve the device names in the newvg volume group.
+    - The following virtual host adapter devices are preserved:
+    - vfchost adapter devices,
+    - fcnvme, nvme devices
+    - fscsi devices
+    - iSCSI devices
+    - network adapter devices.
+    type: bool
+    default: no
+  skiprestore:
+    description:
+    - Skips the restore operation of the VIOS metadata configuration after
+    - the operation of the viosupgrade installation process is completed and
+    - the VIOS is booted from the newly installed rootvg disk.
+    - You cannot use this with the I(pre_restore_script) as true.
     type: bool
     default: no
   wait_reboot:

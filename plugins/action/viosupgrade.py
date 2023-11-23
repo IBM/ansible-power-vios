@@ -54,7 +54,10 @@ class ActionModule(ActionBase):
         'filename',
         'timeout',
         'post_install_binary',
+        'pre_restore_script',
         'skipclusterstate',
+        'skiprestore',
+        'preserve_devname',
         'wait_reboot'
     ))
 
@@ -132,9 +135,19 @@ class ActionModule(ActionBase):
             if not isinstance(cluster, bool):
                 cluster = boolean(self._templar.template(cluster), strict=False)
         post_install_binary = self._task.args.get('post_install_binary', None)
+        pre_restore_script = self._task.args.get('pre_restore_script', None)
         skipclusterstate = self._task.args.get('skipclusterstate', False)
+        skiprestore = self._task.args.get('skiprestore', False)
+        preserve_devname = self._task.args.get('preserve_devname', False)
+
+        if pre_restore_script and skiprestore:
+            result['failed'] = True
+            result['msg'] = 'Using pre_restore_script and skiprestore together is prohibited.'
+            return result
         if not isinstance(skipclusterstate, bool):
             skipclusterstate = boolean(self._templar.template(skipclusterstate), strict=False)
+        if not isinstance(skiprestore, bool):
+            skiprestore = boolean(self._templar.template(skiprestore), strict=False)
         wait_reboot = self._task.args.get('wait_reboot', True)
         if not isinstance(wait_reboot, bool):
             wait_reboot = boolean(self._templar.template(wait_reboot), strict=False)
@@ -160,6 +173,7 @@ class ActionModule(ActionBase):
         has_g_opt = re.search(r"^-g\s+", cmd_result['stdout'], re.MULTILINE) is not None
         has_F_opt = re.search(r"^-F\s+", cmd_result['stdout'], re.MULTILINE) is not None
         has_P_opt = re.search(r"^-P\s+", cmd_result['stdout'], re.MULTILINE) is not None
+        has_k_opt = re.search(r"^-k\s+", cmd_result['stdout'], re.MULTILINE) is not None
 
         ruser = self._get_remote_user()
         wait_completion = False
@@ -196,9 +210,15 @@ class ActionModule(ActionBase):
                 force_options += ['forcecopy']
             if skipclusterstate:
                 force_options += ['skipclusterstate']
+            if preserve_devname:
+                force_options += ['devname']
+            if skiprestore:
+                force_options += ['skiprestore']
             if force_options:
                 cmd += " -F %s" % ':'.join(force_options)
 
+        if has_k_opt and pre_restore_script:
+            cmd += " -k %s" % quote(pre_restore_script)
         if has_P_opt and post_install_binary:
             cmd += " -P %s" % quote(post_install_binary)
 
