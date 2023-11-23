@@ -602,16 +602,8 @@ def dictionary_to_json(dict_val, payload_type):
         json_object (JSON) : JSON object containing all the attributes in JSON format.
     '''
 
-    out_file = open("payloadfile.json", "w")
-
-    temp_out = open(payload_type, "w")
-
-    json.dump(dict_val, out_file, indent=4)
-
-    json.dump(dict_val, temp_out, indent=4)
-
-    out_file.close()
-    temp_out.close()
+    with open("payloadfile.json", "w", encoding="utf-8") as out_file:
+        json.dump(dict_val, out_file, indent=4)
 
 
 def remove_json_file(module):
@@ -707,7 +699,7 @@ def get_URL(module):
             URL.append(keys["url"])
             size_of_file += keys['size']
 
-    if URL != []:
+    if URL:
         return URL
     else:
         results['msg'] = "Could not retrieve the URLs."
