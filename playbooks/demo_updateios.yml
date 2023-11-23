@@ -21,7 +21,7 @@
       filesets: [ios.cli.man.es_ES, ios.cli.man.fr_FR]
 
   - name: Update the VIOS to the latest level, where the updates are
-        located on the mounted file system /home/padmin/update
+        present at a particular location
     updateios:
       action: update
       device: "{{ device_val }}"
