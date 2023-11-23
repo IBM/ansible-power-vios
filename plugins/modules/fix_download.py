@@ -181,6 +181,7 @@ import time
 import datetime
 import urllib.request
 
+from builtins import round
 from ansible.module_utils.basic import AnsibleModule
 
 event_id = ""
