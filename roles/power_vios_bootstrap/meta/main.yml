@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: power_vios_bootstrap
-  author: Nitish Mishra
-  description: Ansible role for bootstrapping IBM Power Systems VIOS servers with DNF package managers.
+  role_name: power_aix_bootstrap
+  author: Paul Finley, Nitish Mishra
+  description: Ansible role for bootstrapping IBM Power Systems AIX servers with DNF package managers.
   company: IBM
 
   license: GPL-3.0-only
@@ -10,9 +10,9 @@ galaxy_info:
   min_ansible_version: 2.9
 
   platforms:
-    - name: VIOS
+    - name: AIX
       versions:
         - all
 
-  galaxy_tags: [vios]
+  galaxy_tags: [aix]
   dependencies: []

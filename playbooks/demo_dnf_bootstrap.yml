@@ -1,0 +1,17 @@
+---
+- name: "Bootstrap dnf on VIOS"
+  hosts: all
+  gather_facts: no
+  user: root
+  collections:
+  - ibm.power_vios
+  tasks:
+
+# CHECK for dnf on inventory host
+  - import_role:
+      name: power_aix_bootstrap
+    vars:
+      pkgtype: "dnf"
+      download_dir: "~"
+      target_dir: "/tmp/.ansible.cpdir"
+      ansible_user: root
