@@ -70,6 +70,7 @@ options:
 notes:
   - A fix pack or service pack cannot be applied if the VIOS partition is part
     of a shared storage pool and the cluster node state is UP.
+  - remove_outdated_filesets action is supported from VIOS version 3.1.2.40 onwards
 '''
 
 EXAMPLES = r'''
