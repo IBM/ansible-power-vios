@@ -127,7 +127,7 @@ def get_pvs(module):
 
     module.debug('List of PVs:')
     for item in pvs.items():
-        module.debug(f'    pvs[{item[0]}]: {pvs[item[0]]}')
+        module.debug(f'    pvs[{item[0]}]: {item[1]}')
 
     return pvs
 
@@ -160,7 +160,7 @@ def get_free_pvs(module):
 
     module.debug('List of available PVs:')
     for item in free_pvs.items():
-        module.debug(f'    free_pvs[{item[0]}]: {free_pvs[item[0]]}')
+        module.debug(f'    free_pvs[{item[0]}]: {item[1]}')
 
     return free_pvs
 
@@ -432,7 +432,7 @@ def alt_disk_clean(module, hdisks):
         # Retrieve the list of disks that belong to altinst_rootvg
         hdisks = []
         for pv in pvs.items():
-            if pvs[pv[0]]['vg'] == 'altinst_rootvg':
+            if pv[1]['vg'] == 'altinst_rootvg':
                 hdisks.append(pv[0])
         if not hdisks:
             # Do not fail if there is no altinst_rootvg to preserve idempotency
