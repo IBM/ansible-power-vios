@@ -373,6 +373,7 @@ def viosbr_list(module, params):
         results['msg'] = f"Command \'{' '.join(cmd)}\' failed with return code {ret}."
         module.fail_json(**results)
 
+
 def viosbr_view(module, params):
     """
     Displays information for a user-specified backup file

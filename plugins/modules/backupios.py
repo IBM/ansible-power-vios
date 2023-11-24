@@ -110,13 +110,13 @@ def get_ioslevel(module):
     if ret != 0:
         results['stdout'] = stdout
         results['stderr'] = stderr
-        results['msg'] = 'Could not retrieve ioslevel, return code {0}.'.format(ret)
+        results['msg'] = f'Could not retrieve ioslevel, return code {ret}.'
         module.fail_json(**results)
 
     ioslevel = stdout.split('\n')[0]
 
     if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
-        results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
+        results['msg'] = f'Could not parse ioslevel output {ioslevel}.'
         module.fail_json(**results)
 
     results['ioslevel'] = ioslevel
@@ -154,7 +154,7 @@ def main():
         cmd += ['-mksysb']
         if params['nopack']:
             # Create exclude file from exclude list
-            with open('/etc/exclude_packing.rootvg', 'w+') as f:
+            with open('/etc/exclude_packing.rootvg', 'w+', encoding="utf-8") as f:
                 f.writelines(line + '\n' for line in params['nopack'])
             cmd += ['-nopak']
     if not params['savevgstruct']:
@@ -166,7 +166,7 @@ def main():
     results['stdout'] = stdout
     results['stderr'] = stderr
     if ret != 0:
-        results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(' '.join(cmd), ret)
+        results['msg'] = f"Command \'{' '.join(cmd)}\' failed with return code {ret}."
         module.fail_json(**results)
 
     results['changed'] = True

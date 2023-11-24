@@ -579,6 +579,7 @@ results = dict(
     stderr='',
 )
 
+
 def vscsi_mappings(module, mappings):
     """
     Retrieve VSCSI mappings.
