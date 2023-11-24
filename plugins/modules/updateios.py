@@ -70,6 +70,7 @@ options:
 notes:
   - A fix pack or service pack cannot be applied if the VIOS partition is part
     of a shared storage pool and the cluster node state is UP.
+  - remove_outdated_filesets action is supported from VIOS version 3.1.2.40 onwards
 '''
 
 EXAMPLES = r'''
@@ -151,13 +152,13 @@ def get_ioslevel(module):
     if ret != 0:
         results['stdout'] = stdout
         results['stderr'] = stderr
-        results['msg'] = 'Could not retrieve ioslevel, return code {0}.'.format(ret)
+        results['msg'] = f'Could not retrieve ioslevel, return code {ret}.'
         module.fail_json(**results)
 
     ioslevel = stdout.split('\n')[0]
 
     if not re.match(r"^\d+\.\d+\.\d+\.\d+$", ioslevel):
-        results['msg'] = 'Could not parse ioslevel output {0}.'.format(ioslevel)
+        results['msg'] = f'Could not parse ioslevel output {ioslevel}.'
         module.fail_json(**results)
 
     results['ioslevel'] = ioslevel
@@ -233,12 +234,12 @@ def main():
     # It is better to call clstartstop from the playbook or from a role
     # to remove the VIOS from the cluster before applying any update.
 
-    shcmd = "echo '{0}' | {1}".format(response, ' '.join(cmd))
+    shcmd = f"echo '{response}' | {' '.join(cmd)}"
     ret, stdout, stderr = module.run_command(shcmd, use_unsafe_shell=True)
     results['stdout'] = stdout
     results['stderr'] = stderr
     if ret != 0:
-        results['msg'] = 'Command \'{0}\' failed with return code {1}.'.format(shcmd, ret)
+        results['msg'] = f'Command \'{shcmd}\' failed with return code {ret}.'
         module.fail_json(**results)
 
     if action != 'list' and not module.check_mode:

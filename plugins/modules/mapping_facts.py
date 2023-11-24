@@ -571,7 +571,13 @@ from ansible.module_utils.basic import AnsibleModule
 
 ioscli_cmd = '/usr/ios/cli/ioscli'
 delimiter = ','  # Delimiter to use for lsmap -fmt
-
+results = dict(
+    changed=False,
+    cmd='',
+    msg='',
+    stdout='',
+    stderr='',
+)
 
 def vscsi_mappings(module, mappings):
     """
@@ -594,7 +600,11 @@ def vscsi_mappings(module, mappings):
     if ret != 0:
         if (ret == 10 or ret == 15) and module.params['component'] != 'vscsi':
             return  # E_NODEVPHYSLOC or E_NOTSVSA_S
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap:
     # svsa:physloc:clientid(:vtd:status:lun:backing:bdphysloc:mirrored)+
@@ -647,7 +657,11 @@ def npiv_mappings(module, mappings):
     if ret != 0:
         if (ret == 10 or ret == 63) and module.params['component'] != 'npiv':
             return  # E_NODEVPHYSLOC or E_NOTSVFCA_S
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap -npiv:
     # name:physloc:clntid:clntname:clntos:status:fc:fcphysloc:ports:flags:vfcclient:vfcclientdrc
@@ -697,7 +711,11 @@ def net_mappings(module, mappings):
     if ret != 0:
         if (ret == 10 or ret == 16) and module.params['component'] != 'net':
             return  # E_NODEVPHYSLOC or E_NOTSVEA_S
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap -net:
     # svea:physloc:sea:backing:status:bdphysloc
@@ -743,7 +761,11 @@ def vnic_mappings(module, mappings):
             return  # Ignore if lsmap -vnic option is not supported
         if (ret == 10 or ret == 88) and module.params['component'] != 'vnic':
             return  # E_NODEVPHYSLOC or E_NOT_SVNIC_S
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap -vnic:
     # name:physloc:clntid:clntname:clntos:backing:status:bdphysloc:clntdev:clntphysloc
@@ -791,7 +813,11 @@ def ams_mappings(module, mappings):
     if ret != 0:
         if ret == 69 and module.params['component'] != 'ams':
             return  # E_NOTSVPD_S
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap -ams:
     # paging:streamid:clientid:status:redundancy:backing:poolid:vasi:pager:vbsd
@@ -839,7 +865,11 @@ def suspend_mappings(module, mappings):
     if ret != 0:
         if ret == 15 and module.params['component'] != 'suspend':
             return  # E_NOTSVSA_S
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap -suspend:
     # svsa:state:clientname:streamid:clientid(:vtd:status:lun:backing:bdphysloc:mirrored)+
@@ -903,7 +933,11 @@ def cluster_mappings(module, mappings):
         if module.params['component'] != 'cluster':
             mappings['cluster'][clustername]['errmsg'] = stderr
             return
-        module.fail_json(msg='lsmap failed rc=%d' % ret, stdout=stdout, stderr=stderr)
+
+        results['msg'] = f'lsmap failed rc={ret}'
+        results['stdout'] = stdout
+        results['stderr'] = stderr
+        module.fail_json(**results)
 
     # List of fields returned by lsmap -clustername:
     # physloc:clientid:vtd:lun:backing
