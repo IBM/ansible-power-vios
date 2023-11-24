@@ -1,4 +1,3 @@
-
 <!-- This should be the location of the title of the repository, normally the short name -->
 # IBM Power Systems VIOS Collection
 
@@ -44,6 +43,14 @@ This repository contains some example best practices for open source repositorie
 - Requires Ansible 2.0 or newer
 - For help installing Ansible, refer to the [Installing Ansible] section of the Ansible Documentation
 - For help installing the ibm.power\_vios collection, refer to the [install](docs/source/installation.rst) page of this project
+
+### ansible user for VIOS
+
+- Modules included in this collection require administrator rights to run.
+- It is recommended to create an ``ansible`` user with the proper level of privilege on the VIOS like this:
+- command(1): oem_setup_env
+- command(2): mkuser roles=PAdmin,CacheAdm,FSAdmin,pkgadm default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
+- To connect to the VIOS using this `ansible` user, specify `user: ansible` in the playbook or `ansible_user=ansible` in the inventory.
 
 ### Python
 
@@ -103,10 +110,8 @@ Authors:
 - Pascal Oliva <poliva@us.ibm.com>
 - Shreyansh Chamola <shreyansh.chamola@ibm.com>
 
-
 [coc]: https://help.github.com/en/github/building-a-strong-community/adding-a-code-of-conduct-to-your-project
 [issues]: https://github.com/IBM/ansible-power-vios/issues/new
 [YUM]: https://developer.ibm.com/articles/configure-yum-on-aix/
 [pages]: https://ibm.github.io/ansible-power-vios/
 [Installing Ansible]: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
-

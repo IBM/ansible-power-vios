@@ -5,6 +5,32 @@
 Releases
 ========
 
+Version 1.3.0
+---------------
+Notes
+  * New module: fix_download to download fixes from EFD portal.
+  * 5 New playbooks: viosbr, updateios, viosupgrade, fix_download, end-to-end update.
+  * Enhancement to support remove_outdated_filesets action in updateios module.
+  * Enhancement to support view action in viosbr module.
+  * Support for -k -F devname in viosupgrade module.
+  * Updated dnf bootstrap to address the changes in Toolbox.
+  * Enhancement in dnf bootstrap to install dnf on all VIOS version.
+  * YUM is no more supported.
+
+Availability
+  * `Automation Hub v1.3.0`_
+  * `Galaxy v1.3.0`_
+  * `GitHub v1.3.0`_
+
+.. _Automation Hub v1.3.0:
+   https://cloud.redhat.com/ansible/automation-hub/ibm/power_vios
+
+.. _Galaxy v1.3.0:
+   https://galaxy.ansible.com/download/ibm-power_vios-1.3.0.tar.gz
+
+.. _GitHub v1.3.0:
+   https://github.com/IBM/ansible-power-vios/releases/download/v1.3.0/ibm-power_vios-1.3.0.tar.gz
+
 Version 1.2.3
 -------------
 Notes
