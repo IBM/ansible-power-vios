@@ -1,5 +1,12 @@
 # Copyright (c) IBM Corporation 2020
 ---
+- name: Fail if pkgtype is defined as yum
+  fail:
+    msg: yum is not supported anymore, please try dnf
+  when:
+    - (pkgtype == "yum")
+    - download_dir is not defined
+
 - name: Fail if pkgtype not specified
   fail:
     msg: pkgtype not specified
@@ -9,29 +16,29 @@
   fail:
     msg: download_dir not specified
   when:
-    - (pkgtype == "yum") or (pkgtype == "dnf")
+    - (pkgtype == "dnf")
     - download_dir is not defined
 
 - name: Fail if target_dir not specified
   fail:
     msg: target_dir not specified
   when:
-    - (pkgtype == "yum") or (pkgtype == "dnf")
+    - (pkgtype == "dnf")
     - not target_dir is defined
 
 - name: Fail if rpm_src not specified
   fail:
     msg: rpm_src not specified
   when:
-    - (pkgtype == "yum") or (pkgtype == "dnf")
+    - (pkgtype == "dnf")
     - not rpm_src is defined
 
 - name: Fail if dnf_src not specified
   fail:
-    msg: dnf_src_71_72
+    msg: dnf_src_71_72 or dnf_src_73 not specified
   when:
     - pkgtype == "dnf"
-    - (dnf_src_71_72 is not defined)
+    - (dnf_src_71_72 is not defined) or ( dnf_src_73 is not defined)
 
 - name: Bootstrap dnf
   include_tasks: "dnf_install.yml"
