@@ -40,7 +40,7 @@ This repository contains some example best practices for open source repositorie
 
 ### Ansible
 
-- Requires Ansible 2.0 or newer
+- Requires Ansible 2.14 or newer
 - For help installing Ansible, refer to the [Installing Ansible] section of the Ansible Documentation
 - For help installing the ibm.power\_vios collection, refer to the [install](docs/source/installation.rst) page of this project
 
@@ -50,11 +50,16 @@ This repository contains some example best practices for open source repositorie
 - It is recommended to create an ``ansible`` user with the proper level of privilege on the VIOS like this:
 - command(1): oem_setup_env
 - command(2): mkuser roles=PAdmin,CacheAdm,FSAdmin,pkgadm default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
+- sudoers-rule for the Ansible user: anisble ALL=(ALL), NOPASSWD: ALL
 - To connect to the VIOS using this `ansible` user, specify `user: ansible` in the playbook or `ansible_user=ansible` in the inventory.
+
+### Authentication:
+
+- echo "ssh_ssh_pub_key" >> /home/ansible/.ssh/authorized_keys
 
 ### Python
 
-- Requires Python 2.7 or newer
+- Requires Python 3.9 or newer
 - To install (or upgrade) Python on VIOS, you must first configure [YUM].  As part of YUM installation, Python2 will be installed by default
 - After setting up and installing YUM, you may update all the packages to the latest level using the yum update command
 
