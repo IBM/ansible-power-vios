@@ -50,7 +50,7 @@ This repository contains some example best practices for open source repositorie
 - It is recommended to create an ``ansible`` user with the proper level of privilege on the VIOS like this:
 - command(1): oem_setup_env
 - command(2): mkuser roles=PAdmin,CacheAdm,FSAdmin,pkgadm default_roles=PAdmin,CacheAdm,FSAdmin,pkgadm ansible
-- sudoers-rule for the Ansible user: anisble ALL=(ALL), NOPASSWD: ALL
+- sudoers-rule for the Ansible user: ansible ALL=(ALL), NOPASSWD: ALL
 - To connect to the VIOS using this `ansible` user, specify `user: ansible` in the playbook or `ansible_user=ansible` in the inventory.
 
 ### Authentication:
@@ -60,8 +60,8 @@ This repository contains some example best practices for open source repositorie
 ### Python
 
 - Requires Python 3.9 or newer
-- To install (or upgrade) Python on VIOS, you must first configure [YUM].  As part of YUM installation, Python2 will be installed by default
-- After setting up and installing YUM, you may update all the packages to the latest level using the yum update command
+- To install (or upgrade) Python on VIOS, you must first configure [DNF].  As part of DNF installation, Python3 will be installed by default
+- After setting up and installing DNF, you may update all the packages to the latest level using the dnf update command
 
 ## Resources
 
@@ -117,6 +117,6 @@ Authors:
 
 [coc]: https://help.github.com/en/github/building-a-strong-community/adding-a-code-of-conduct-to-your-project
 [issues]: https://github.com/IBM/ansible-power-vios/issues/new
-[YUM]: https://developer.ibm.com/articles/configure-yum-on-aix/
+[DNF]: https://developer.ibm.com/tutorials/awb-configuring-dnf-create-local-repos-ibm-aix/
 [pages]: https://ibm.github.io/ansible-power-vios/
 [Installing Ansible]: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
