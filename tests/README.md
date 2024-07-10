@@ -7,7 +7,7 @@ Steps:
 (1) clone the repository into your local environment inside the 
 directort structure `ansible_collections/ibm/power_vios
 ```
-git clone git@github.com:nitismis/ansible-power-vios.git ansible_collections/ibm/power_vios
+git clone git@github.com:IBM/ansible-power-vios.git ansible_collections/ibm/power_vios
 ```
 
 (2) `cd ansible_collections/ibm/power_vios`
